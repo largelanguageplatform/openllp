@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Receipt",
+  "type": "object",
+  "required": ["receipt_number", "date", "vendor_id", "from", "to", "items", "subtotal", "tax_rate", "tax_amount", "total", "payment_method"],
+  "properties": {
+    "receipt_number": { "type": "string", "description": "Unique receipt identifier (e.g. REC-12345, ORD-847291)" },
+    "date": { "type": "string", "description": "Receipt date in YYYY-MM-DD format" },
+    "vendor_id": {
+      "type": "string",
+      "enum": ["amazon", "uber", "costco", "homedepot", "fedex", "shell", "staples", "delta", "starbucks", "mcdonalds", "chipotle", "walmart"],
+      "description": "Vendor brand identifier — determines logo, color scheme, and receipt format (A4 or thermal)"
+    },
+    "from": {
+      "type": "object",
+      "required": ["name", "address"],
+      "properties": {
+        "name": { "type": "string", "description": "Vendor's full business name" },
+        "address": { "type": "string", "description": "Vendor's address" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" }
+      }
+    },
+    "to": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "description": "Purchaser's name" },
+        "address": { "type": "string" },
+        "email": { "type": "string" }
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["description", "quantity", "unit_price", "amount"],
+        "properties": {
+          "description": { "type": "string" },
+          "quantity": { "type": "integer", "minimum": 1 },
+          "unit_price": { "type": "number" },
+          "amount": { "type": "number" }
+        }
+      }
+    },
+    "subtotal": { "type": "number" },
+    "tax_rate": { "type": "number", "description": "Tax rate as decimal (e.g. 0.08 for 8%)" },
+    "tax_amount": { "type": "number" },
+    "total": { "type": "number" },
+    "payment_method": { "type": "string", "description": "e.g. Visa ****1234, Amex ****5678, Mastercard ****9012" }
+  }
+}

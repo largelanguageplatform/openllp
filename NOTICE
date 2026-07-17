@@ -1,0 +1,21 @@
+OpenLLP
+Copyright 2026 Large Language Platform Inc.
+
+This product includes software developed at Large Language Platform Inc.
+
+This distribution vendors the following third-party software in
+platform/assets/vendor/, each under the MIT license:
+
+- daisyUI — Copyright (c) 2020 Pouya Saadeghi — https://daisyui.com
+  (daisyui.js, daisyui-theme.js; upstream license text embedded in the files)
+- topbar 3.0.0 — Copyright (c) 2024 Buu Nguyen — https://buunguyen.github.io/topbar/
+  (topbar.js; upstream license header intact)
+- PrismJS 1.30.0 — Copyright (c) 2012 Lea Verou — https://prismjs.com
+  (prism.min.js is the official minified download, which carries only a
+  version banner; full license: https://github.com/PrismJS/prism/blob/master/LICENSE)
+  (prism-theme.css is a first-party modification derived from the PrismJS
+  default theme, attribution header in the file)
+
+Fetched at build time as a Mix dependency (not vendored in this tree):
+
+- heroicons (MIT) — Copyright (c) Tailwind Labs, Inc. — https://heroicons.com

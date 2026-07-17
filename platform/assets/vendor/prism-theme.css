@@ -1,0 +1,146 @@
+/**
+ * Minimal Prism.js theme for docs
+ * Works with both light and dark modes using CSS variables
+ *
+ * Derived from the PrismJS default theme (themes/prism.css),
+ * Copyright (c) 2012 Lea Verou, MIT license: https://github.com/PrismJS/prism/blob/master/LICENSE
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+  color: var(--color-text, #111111);
+  background: none;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  tab-size: 4;
+  hyphens: none;
+}
+
+/* Token colors - Light mode */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #6B7280;
+}
+
+.token.punctuation {
+  color: #6B7280;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #B45309;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #047857;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #6B7280;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #7C3AED;
+}
+
+.token.function,
+.token.class-name {
+  color: #2563EB;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #D97706;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .token.comment,
+[data-theme="dark"] .token.prolog,
+[data-theme="dark"] .token.doctype,
+[data-theme="dark"] .token.cdata {
+  color: #9CA3AF;
+}
+
+[data-theme="dark"] .token.punctuation {
+  color: #9CA3AF;
+}
+
+[data-theme="dark"] .token.property,
+[data-theme="dark"] .token.tag,
+[data-theme="dark"] .token.boolean,
+[data-theme="dark"] .token.number,
+[data-theme="dark"] .token.constant,
+[data-theme="dark"] .token.symbol,
+[data-theme="dark"] .token.deleted {
+  color: #F59E0B;
+}
+
+[data-theme="dark"] .token.selector,
+[data-theme="dark"] .token.attr-name,
+[data-theme="dark"] .token.string,
+[data-theme="dark"] .token.char,
+[data-theme="dark"] .token.builtin,
+[data-theme="dark"] .token.inserted {
+  color: #34D399;
+}
+
+[data-theme="dark"] .token.operator,
+[data-theme="dark"] .token.entity,
+[data-theme="dark"] .token.url,
+[data-theme="dark"] .language-css .token.string,
+[data-theme="dark"] .style .token.string {
+  color: #9CA3AF;
+}
+
+[data-theme="dark"] .token.atrule,
+[data-theme="dark"] .token.attr-value,
+[data-theme="dark"] .token.keyword {
+  color: #A78BFA;
+}
+
+[data-theme="dark"] .token.function,
+[data-theme="dark"] .token.class-name {
+  color: #60A5FA;
+}
+
+[data-theme="dark"] .token.regex,
+[data-theme="dark"] .token.important,
+[data-theme="dark"] .token.variable {
+  color: #FBBF24;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}

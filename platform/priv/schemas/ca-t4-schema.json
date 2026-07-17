@@ -1,0 +1,399 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openllp.dev/schemas/tax/ca-t4.json",
+  "title": "CRA Form T4",
+  "description": "Statement of Remuneration Paid (CRA Form T4). All box references correspond to the official Canada Revenue Agency T4 slip.",
+  "type": "object",
+  "required": ["tax_year", "employer", "employee", "income"],
+  "properties": {
+    "tax_year": {
+      "type": "integer",
+      "minimum": 2000,
+      "maximum": 2099,
+      "description": "Tax year for which this T4 was issued"
+    },
+    "employer": {
+      "type": "object",
+      "description": "Employer identification",
+      "required": ["name", "business_number"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Employer's name"
+        },
+        "business_number": {
+          "type": "string",
+          "pattern": "^[0-9]{9}RP[0-9]{4}$",
+          "description": "Box 54 — Payroll account number (Business Number), format: 123456789RP0001"
+        },
+        "address": { "$ref": "#/$defs/ca_address" }
+      }
+    },
+    "employee": {
+      "type": "object",
+      "description": "Employee identification",
+      "required": ["sin", "name"],
+      "properties": {
+        "sin": {
+          "type": "string",
+          "pattern": "^[0-9]{3}-[0-9]{3}-[0-9]{3}$",
+          "description": "Box 12 — Social Insurance Number (SIN), format: XXX-XXX-XXX"
+        },
+        "name": {
+          "type": "object",
+          "required": ["first_name", "last_name"],
+          "properties": {
+            "first_name": { "type": "string" },
+            "middle_initial": { "type": "string", "maxLength": 1 },
+            "last_name": { "type": "string" }
+          }
+        },
+        "address": { "$ref": "#/$defs/ca_address" }
+      }
+    },
+    "province_of_employment": {
+      "type": "string",
+      "enum": [
+        "AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"
+      ],
+      "description": "Box 10 — Province or territory of employment"
+    },
+    "employment_code": {
+      "type": "string",
+      "enum": ["11", "12", "13", "14", "15", "16", "17"],
+      "description": "Box 29 — Employment code (11=Regular, 12=Seasonal, 13=Part-time, 14=Casual, 15=Agent/commission, 16=Piece work, 17=Other)"
+    },
+    "exempt_status": {
+      "type": "object",
+      "description": "Box 28 — CPP/QPP, EI, and PPIP exemption indicators",
+      "properties": {
+        "cpp_qpp_exempt": {
+          "type": "boolean",
+          "default": false,
+          "description": "Exempt from CPP/QPP contributions"
+        },
+        "ei_exempt": {
+          "type": "boolean",
+          "default": false,
+          "description": "Exempt from EI premiums"
+        },
+        "ppip_exempt": {
+          "type": "boolean",
+          "default": false,
+          "description": "Exempt from PPIP premiums"
+        }
+      }
+    },
+    "income": {
+      "type": "object",
+      "description": "Income and tax deduction fields",
+      "required": ["box14_employment_income"],
+      "properties": {
+        "box14_employment_income": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 14 — Employment income (total before deductions)"
+        },
+        "box22_income_tax_deducted": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 22 — Income tax deducted"
+        },
+        "box42_employment_commissions": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 42 — Employment commissions included in Box 14"
+        }
+      }
+    },
+    "cpp_qpp": {
+      "type": "object",
+      "description": "Canada/Quebec Pension Plan contributions",
+      "properties": {
+        "box16_cpp_contributions": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 16 — Employee's CPP contributions"
+        },
+        "box16a_cpp2_contributions": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 16A — Employee's second CPP contributions (CPP2)"
+        },
+        "box17_qpp_contributions": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 17 — Employee's QPP contributions (Quebec only)"
+        },
+        "box17a_qpp2_contributions": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 17A — Employee's second QPP contributions (QPP2)"
+        },
+        "box26_pensionable_earnings": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 26 — CPP/QPP pensionable earnings"
+        }
+      }
+    },
+    "ei": {
+      "type": "object",
+      "description": "Employment Insurance fields",
+      "properties": {
+        "box18_ei_premiums": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 18 — Employee's EI premiums"
+        },
+        "box24_ei_insurable_earnings": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 24 — EI insurable earnings"
+        }
+      }
+    },
+    "pension": {
+      "type": "object",
+      "description": "Registered pension plan and pension adjustment fields",
+      "properties": {
+        "box20_rpp_contributions": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 20 — Registered Pension Plan (RPP) contributions"
+        },
+        "box50_rpp_dpsp_number": {
+          "type": "string",
+          "description": "Box 50 — RPP or DPSP registration number"
+        },
+        "box52_pension_adjustment": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 52 — Pension adjustment"
+        },
+        "box74_past_service_contributor": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 74 — Past service contributions for 1989 or earlier (while a contributor)"
+        },
+        "box75_past_service_non_contributor": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 75 — Past service contributions for 1989 or earlier (while not a contributor)"
+        }
+      }
+    },
+    "ppip": {
+      "type": "object",
+      "description": "Provincial Parental Insurance Plan (Quebec only)",
+      "properties": {
+        "box55_ppip_premiums": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 55 — Employee's PPIP premiums"
+        },
+        "box56_ppip_insurable_earnings": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 56 — PPIP insurable earnings"
+        }
+      }
+    },
+    "benefits_allowances": {
+      "type": "object",
+      "description": "Taxable benefits and allowances (Boxes 30–41)",
+      "properties": {
+        "box30_board_lodging": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 30 — Board and lodging"
+        },
+        "box31_special_work_site": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 31 — Special work site"
+        },
+        "box32_travel_prescribed_zone": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 32 — Travel in a prescribed zone"
+        },
+        "box33_medical_travel": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 33 — Medical travel assistance"
+        },
+        "box34_personal_vehicle_use": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 34 — Personal use of employer's automobile or motor vehicle"
+        },
+        "box36_low_interest_loans": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 36 — Interest-free and low-interest loans"
+        },
+        "box38_security_options_benefits": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 38 — Security options benefits"
+        },
+        "box39_security_options_deduction_d": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 39 — Security options deduction 110(1)(d)"
+        },
+        "box40_other_taxable_allowances": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 40 — Other taxable allowances and benefits"
+        },
+        "box41_security_options_deduction_d1": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 41 — Security options deduction 110(1)(d.1)"
+        }
+      }
+    },
+    "deductions": {
+      "type": "object",
+      "description": "Employee deductions",
+      "properties": {
+        "box43_forces_police_deduction": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 43 — Canadian Armed Forces personnel and police deduction"
+        },
+        "box44_union_dues": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 44 — Union dues"
+        },
+        "box46_charitable_donations": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 46 — Charitable donations"
+        },
+        "box85_private_health_premiums": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 85 — Employee-paid premiums for private health services plans"
+        }
+      }
+    },
+    "dental_benefits": {
+      "type": "string",
+      "enum": ["1", "2", "3", "4"],
+      "description": "Box 45 — Employer-offered dental benefits (1=No dental, 2=Full family, 3=Employee only, 4=Dependents only)"
+    },
+    "retiring_allowances": {
+      "type": "object",
+      "description": "Retiring allowance fields",
+      "properties": {
+        "box66_eligible": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 66 — Eligible retiring allowances"
+        },
+        "box67_non_eligible": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 67 — Non-eligible retiring allowances"
+        }
+      }
+    },
+    "indian_act": {
+      "type": "object",
+      "description": "Indian Act exempt income",
+      "properties": {
+        "box69_non_eligible_retiring": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 69 — Indian Act exempt income — Non-eligible retiring allowances"
+        },
+        "box71_employment": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 71 — Indian Act exempt income — Employment"
+        },
+        "box88_self_employment": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 88 — Indian Act exempt income — Self-employment"
+        }
+      }
+    },
+    "special_situations": {
+      "type": "object",
+      "description": "Special employment situations (fishers, agency workers, etc.)",
+      "properties": {
+        "box77_wc_repaid": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 77 — Workers' compensation benefits repaid to the employer"
+        },
+        "box78_fishers_gross": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 78 — Fishers — Gross income"
+        },
+        "box79_fishers_net_partnership": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 79 — Fishers — Net partnership amount"
+        },
+        "box80_fishers_shareperson": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 80 — Fishers — Shareperson amount"
+        },
+        "box81_agency_workers_gross": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 81 — Placement or employment agency workers — Gross income"
+        },
+        "box82_taxi_drivers_gross": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 82 — Taxi drivers and drivers of other passenger-carrying vehicles — Gross income"
+        },
+        "box83_barbers_gross": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 83 — Barbers or hairdressers — Gross income"
+        },
+        "box86_security_options_election": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 86 — Security options election"
+        },
+        "box87_volunteer_exempt": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 87 — Emergency services volunteer exempt amount"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ca_address": {
+      "type": "object",
+      "required": ["street", "city", "province", "postal_code"],
+      "properties": {
+        "street": { "type": "string", "description": "Street address (line 1)" },
+        "street2": { "type": "string", "description": "Street address (line 2, optional)" },
+        "city": { "type": "string" },
+        "province": {
+          "type": "string",
+          "enum": ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"],
+          "description": "Two-letter province/territory code"
+        },
+        "postal_code": {
+          "type": "string",
+          "pattern": "^[A-Z][0-9][A-Z] [0-9][A-Z][0-9]$",
+          "description": "Canadian postal code, format: A1A 1A1"
+        }
+      }
+    }
+  }
+}

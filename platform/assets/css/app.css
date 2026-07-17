@@ -1,0 +1,1218 @@
+/* See the Tailwind configuration guide for advanced usage
+   https://tailwindcss.com/docs/configuration */
+
+@import "tailwindcss" source(none);
+@source "../css";
+@source "../js";
+@source "../../lib/platform_web";
+
+/* A Tailwind plugin that makes "hero-#{ICON}" classes available.
+   The heroicons installation itself is managed by your mix.exs */
+@plugin "../vendor/heroicons";
+
+/* daisyUI Tailwind Plugin. You can update this file by fetching the latest version with:
+   curl -sLO https://github.com/saadeghi/daisyui/releases/latest/download/daisyui.js
+   Make sure to look at the daisyUI changelog: https://daisyui.com/docs/changelog/ */
+@plugin "../vendor/daisyui" {
+  themes: false;
+}
+
+/* daisyUI theme plugin. You can update this file by fetching the latest version with:
+  curl -sLO https://github.com/saadeghi/daisyui/releases/latest/download/daisyui-theme.js
+  We ship with two themes, a light one inspired on Phoenix colors and a dark one inspired
+  on Elixir colors. Build your own at: https://daisyui.com/theme-generator/ */
+@plugin "../vendor/daisyui-theme" {
+  name: "dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: oklch(22% 0 0);
+  --color-base-200: oklch(18% 0 0);
+  --color-base-300: oklch(14% 0 0);
+  --color-base-content: oklch(90% 0 0);
+  --color-primary: oklch(58% 0.233 277.117);
+  --color-primary-content: oklch(96% 0.018 272.314);
+  --color-secondary: oklch(58% 0.233 277.117);
+  --color-secondary-content: oklch(96% 0.018 272.314);
+  --color-accent: oklch(60% 0.25 292.717);
+  --color-accent-content: oklch(96% 0.016 293.756);
+  --color-neutral: oklch(37% 0.044 257.287);
+  --color-neutral-content: oklch(98% 0.003 247.858);
+  --color-info: oklch(58% 0.158 241.966);
+  --color-info-content: oklch(97% 0.013 236.62);
+  --color-success: oklch(60% 0.118 184.704);
+  --color-success-content: oklch(98% 0.014 180.72);
+  --color-warning: oklch(66% 0.179 58.318);
+  --color-warning-content: oklch(98% 0.022 95.277);
+  --color-error: oklch(58% 0.253 17.585);
+  --color-error-content: oklch(96% 0.015 12.422);
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.21875rem;
+  --size-field: 0.21875rem;
+  --border: 1.5px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@plugin "../vendor/daisyui-theme" {
+  name: "light";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: oklch(98% 0 0);
+  --color-base-200: oklch(96% 0.001 286.375);
+  --color-base-300: oklch(92% 0.004 286.32);
+  --color-base-content: oklch(21% 0.006 285.885);
+  --color-primary: oklch(70% 0.213 47.604);
+  --color-primary-content: oklch(98% 0.016 73.684);
+  --color-secondary: oklch(55% 0.027 264.364);
+  --color-secondary-content: oklch(98% 0.002 247.839);
+  --color-accent: oklch(0% 0 0);
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: oklch(44% 0.017 285.786);
+  --color-neutral-content: oklch(98% 0 0);
+  --color-info: oklch(62% 0.214 259.815);
+  --color-info-content: oklch(97% 0.014 254.604);
+  --color-success: oklch(70% 0.14 182.503);
+  --color-success-content: oklch(98% 0.014 180.72);
+  --color-warning: oklch(66% 0.179 58.318);
+  --color-warning-content: oklch(98% 0.022 95.277);
+  --color-error: oklch(58% 0.253 17.585);
+  --color-error-content: oklch(96% 0.015 12.422);
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.21875rem;
+  --size-field: 0.21875rem;
+  --border: 1.5px;
+  --depth: 1;
+  --noise: 0;
+}
+
+/* Add variants based on LiveView classes */
+@custom-variant phx-click-loading (.phx-click-loading&, .phx-click-loading &);
+@custom-variant phx-submit-loading (.phx-submit-loading&, .phx-submit-loading &);
+@custom-variant phx-change-loading (.phx-change-loading&, .phx-change-loading &);
+
+/* Use the data attribute for dark mode  */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* Make LiveView wrapper divs transparent for layout */
+[data-phx-session], [data-phx-teleported-src] { display: contents }
+
+/* This file is for your main application CSS */
+
+/* Portal Dashboard Custom Styling */
+@import "./portal.css";
+
+/* Prism.js syntax highlighting theme */
+@import "../vendor/prism-theme.css";
+
+/* --------------------------------------------
+   Theme toggle custom styling (non-DaisyUI)
+   -------------------------------------------- */
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 144px;
+  height: 40px;
+  padding: 4px;
+  border-radius: 9999px;
+  border: 1px solid var(--color-border, #E5E7EB);
+  background: var(--color-surface, #FFFFFF);
+  gap: 2px;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.theme-toggle__btn {
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  cursor: pointer;
+  color: var(--color-text-muted, #6B7280);
+  background: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
+  transition: color 120ms ease;
+}
+
+.theme-toggle__btn:hover {
+  color: var(--color-text, #111111);
+}
+
+.theme-toggle__thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(33.333% - 4px);
+  height: calc(100% - 8px);
+  border-radius: 9999px;
+  background: var(--color-highlight, #F9FAFB);
+  border: 1px solid var(--color-border, #E5E7EB);
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
+  transition: left 120ms ease, background-color 120ms ease, border-color 120ms ease;
+}
+
+/* Thumb positions: system=left, light=middle, dark=right */
+[data-active-theme="light"] .theme-toggle__thumb {
+  left: calc(33.333% + 4px);
+}
+
+[data-active-theme="dark"] .theme-toggle__thumb {
+  left: calc(66.666% + 4px);
+}
+
+/* --------------------------------------------
+   Auth page minimal overrides
+   -------------------------------------------- */
+.auth-shell {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 22px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: center;
+}
+
+.auth-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.auth-logo img {
+  height: 240px;
+}
+
+.auth-logo--dark {
+  display: none;
+}
+
+[data-active-theme="dark"] .auth-logo--dark {
+  display: block;
+}
+
+[data-active-theme="dark"] .auth-logo--light {
+  display: none;
+}
+
+/* --------------------------------------------
+   Profile menu (avatar + dropdown)
+   -------------------------------------------- */
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "IBM Plex Mono", "Fira Code", "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono",
+    monospace;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: #111111;
+  background: #ffffff;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  box-shadow: 0 10px 30px -20px rgba(0, 0, 0, 0.25);
+  transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease,
+    transform 120ms ease;
+}
+
+[data-theme="dark"] .profile-avatar {
+  background: #1f1f1f;
+  color: #111111;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px -20px rgba(0, 0, 0, 0.6);
+}
+
+.profile-avatar:hover {
+  border-color: rgba(17, 17, 17, 0.18);
+  box-shadow: 0 12px 36px -20px rgba(0, 0, 0, 0.35);
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .profile-avatar:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.profile-menu__panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 220px;
+  padding: 12px;
+  background: #ffffff;
+  color: #111111;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 12px 30px -18px rgba(0, 0, 0, 0.45);
+  transform-origin: top right;
+  z-index: 20;
+}
+
+[data-theme="dark"] .profile-menu__panel {
+  background: #1e1e1e;
+  color: #f5f5f5;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 30px -18px rgba(0, 0, 0, 0.7);
+}
+
+.profile-menu__action {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  background: transparent;
+  border: 1px solid rgba(17, 17, 17, 0.06);
+  border-radius: 8px;
+  font-family: "IBM Plex Mono", "Fira Code", "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono",
+    monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111111;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease,
+    transform 120ms ease;
+}
+
+.profile-menu__action:hover {
+  background: rgba(17, 17, 17, 0.03);
+  border-color: rgba(17, 17, 17, 0.12);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 30px -24px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .profile-menu__action {
+  color: #f5f5f5;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .profile-menu__action:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* --------------------------------------------
+   Single theme toggle button (g10-inspired)
+   -------------------------------------------- */
+.theme-toggle-single {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border, rgba(17, 17, 17, 0.12));
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.theme-toggle-single__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle-single:hover {
+  border-color: currentColor;
+}
+
+[data-theme="light"] .theme-toggle-single {
+  background: rgba(244, 237, 225, 0.55);
+  border-color: rgba(17, 17, 17, 0.25);
+}
+
+[data-theme="dark"] .theme-toggle-single {
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 8px rgba(231, 220, 197, 0.3);
+}
+
+[data-theme="dark"] .theme-toggle-single:hover {
+  border-color: currentColor;
+}
+
+.auth-shell form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Input overrides: remove mustard/yellow fills and set neutral BG/border */
+.auth-shell input[type="email"],
+.auth-shell input[type="password"],
+.auth-shell input[type="text"] {
+  background: var(--color-surface, #ffffff);
+  color: var(--color-text, #111111);
+  border: 1px solid var(--color-border, #e5e7eb);
+}
+
+[data-active-theme="dark"] .auth-shell input[type="email"],
+[data-active-theme="dark"] .auth-shell input[type="password"],
+[data-active-theme="dark"] .auth-shell input[type="text"] {
+  background: var(--color-surface, #1a1a1a);
+  color: var(--color-text, #e5e5e5);
+  border: 1px solid var(--color-border, #2a2a2a);
+}
+
+/* Ensure consistent background across the viewport (fix split background) */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg, #f5f5f5);
+  color: var(--color-text, #111111);
+}
+
+/* Main content grows to push footer down */
+main {
+  flex: 1;
+}
+
+[data-active-theme="dark"] body {
+  background: var(--color-bg, #0a0a0a);
+  color: var(--color-text, #e5e5e5);
+}
+
+/* --------------------------------------------
+   Auth centered layout (registration)
+   -------------------------------------------- */
+.auth-centered {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 56px - 80px);
+  padding: 56px 12px 40px;
+  gap: 32px;
+  overflow: hidden;
+}
+
+/* Subtle magenta gradient glow — light mode (barely there) */
+.auth-centered::before {
+  content: "";
+  position: absolute;
+  top: -15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 700px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(107, 33, 118, 0.05) 0%,
+    rgba(107, 33, 118, 0.025) 35%,
+    rgba(107, 33, 118, 0.008) 60%,
+    transparent 80%
+  );
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(40px);
+}
+
+/* Subtle magenta gradient glow — dark mode (slightly more perceptible) */
+[data-active-theme="dark"] .auth-centered::before {
+  width: 700px;
+  height: 500px;
+  filter: blur(20px);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(168, 85, 247, 0.10) 0%,
+    rgba(168, 85, 247, 0.05) 30%,
+    rgba(168, 85, 247, 0.015) 55%,
+    transparent 75%
+  );
+}
+
+.auth-logo img {
+  height: 192px;
+}
+
+/* Hero Content — centered single column */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  max-width: 1100px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-headline {
+  font-family: 'Inter', sans-serif;
+  font-size: 4.95rem;
+  font-weight: 700;
+  line-height: 1.05;
+  text-align: center;
+  letter-spacing: -0.03em;
+  color: #1a1a1a;
+  margin: 0;
+  animation: heroFadeIn 0.8s ease-out forwards;
+}
+
+.hero-nowrap {
+  white-space: nowrap;
+}
+
+.hero-accent {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.1em;
+}
+
+[data-active-theme="dark"] .hero-headline {
+  color: #f0ebe4;
+}
+
+/* Auth form slide transitions */
+.auth-form-panel {
+  will-change: transform, opacity;
+}
+
+.auth-slide-from-right {
+  animation: slideFromRight 0.35s ease-out forwards;
+}
+
+.auth-slide-from-left {
+  animation: slideFromLeft 0.35s ease-out forwards;
+}
+
+@keyframes slideFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --------------------------------------------
+   SDK command block
+   -------------------------------------------- */
+.sdk-command {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #2a2a2a;
+  background: #1a1a1a;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  animation: heroFadeIn 0.8s ease-out 0.3s forwards;
+  opacity: 0;
+}
+
+.sdk-command__text {
+  font-family: 'IBM Plex Mono', 'Fira Code', 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875rem;
+  color: #e5e5e5;
+  white-space: nowrap;
+  user-select: all;
+}
+
+.sdk-command__copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #6B7280;
+  transition: color 120ms ease;
+  flex-shrink: 0;
+}
+
+.sdk-command__copy:hover {
+  color: #e5e5e5;
+}
+
+/* Syntax highlighting for npx command — dark mode colors in both modes */
+.sdk-cmd {
+  color: #a855f7;
+  font-weight: 600;
+}
+
+.sdk-pkg {
+  color: #34D399;
+}
+
+/* SSO buttons side by side */
+.sso-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.sso-buttons .google-login-btn,
+.sso-buttons .github-login-btn {
+  flex: 1;
+  max-width: none;
+}
+
+/* Auth shell — tighter for centered layout, Inter regular */
+.auth-centered .auth-shell {
+  max-width: 421px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+}
+
+.auth-centered .auth-shell h1,
+.auth-centered .auth-shell .btn-full,
+.auth-centered .auth-shell button[type="submit"] {
+  font-weight: 500;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .auth-centered {
+    padding: 40px 16px 32px;
+    gap: 32px;
+  }
+
+  .auth-centered::before {
+    width: 400px;
+    height: 300px;
+  }
+
+  .hero-content {
+    padding: 0 8px;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .hero-headline {
+    font-size: 2.73rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .sdk-command {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .sdk-command__text {
+    font-size: 0.75rem;
+  }
+}
+
+.auth-shell h1,
+.auth-shell p,
+.auth-shell label,
+.auth-shell .text-gray-600,
+.auth-shell .text-gray-900 {
+  color: var(--color-text, #111111);
+}
+
+[data-active-theme="dark"] .auth-shell h1,
+[data-active-theme="dark"] .auth-shell p,
+[data-active-theme="dark"] .auth-shell label,
+[data-active-theme="dark"] .auth-shell .text-gray-600,
+[data-active-theme="dark"] .auth-shell .text-gray-900 {
+  color: var(--color-text, #e5e5e5);
+}
+
+.auth-shell .text-gray-600 {
+  color: var(--color-text-muted, #6b7280);
+}
+
+[data-active-theme="dark"] .auth-shell .text-gray-600 {
+  color: var(--color-text-muted, #9ca3af);
+}
+
+.auth-shell .space-y-6 > div:first-child,
+.auth-shell .space-y-8 > div:first-child {
+  text-align: center;
+}
+
+/* ============================================
+   SITE HEADER
+   ============================================ */
+
+.site-header {
+  height: 56px;
+  border-bottom: 1px solid var(--color-border, #E5E7EB);
+  background: var(--color-bg, #F5F5F5);
+}
+
+[data-theme="dark"] .site-header {
+  border-bottom-color: var(--color-border, #2A2A2A);
+  background: var(--color-bg, #121212);
+}
+
+.site-header__inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  height: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Logo */
+.site-header__logo-wrapper {
+  justify-self: start;
+  margin-left: 0;
+}
+
+.site-header__logo {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  transition: opacity 120ms ease;
+}
+
+.site-header__logo:hover {
+  opacity: 0.7;
+}
+
+.site-header__logo-img {
+  height: 55px;
+  width: auto;
+}
+
+/* Light mode: show light logo, hide dark logo */
+.site-header__logo-img--light {
+  display: block;
+}
+
+.site-header__logo-img--dark {
+  display: none;
+}
+
+/* Dark mode: show dark logo, hide light logo */
+[data-active-theme="dark"] .site-header__logo-img--light {
+  display: none;
+}
+
+[data-active-theme="dark"] .site-header__logo-img--dark {
+  display: block;
+}
+
+/* Navigation */
+.site-nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  height: 100%;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  padding-right: 1.5em;
+}
+
+.site-nav__tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  min-height: 48px;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--color-text, #111111);
+  opacity: 0.78;
+  text-decoration: none;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: opacity 150ms ease, color 150ms ease, transform 150ms ease;
+}
+
+.site-nav__tab:hover {
+  opacity: 1;
+  color: #8b5cf6;
+}
+
+.site-nav__tab--active {
+  font-weight: 600;
+  opacity: 1;
+  border-bottom: 2px solid #8b5cf6;
+  margin-bottom: -1px;
+}
+
+[data-theme="dark"] .site-nav__tab {
+  color: var(--color-text, #E5E5E5);
+}
+
+[data-theme="dark"] .site-nav__tab:hover {
+  color: #a78bfa;
+}
+
+[data-theme="dark"] .site-nav__tab--active {
+  border-bottom-color: #a78bfa;
+}
+
+/* Right actions */
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* Responsive: Small screens (< 640px) */
+@media (max-width: 639px) {
+  .site-header__inner {
+    padding: 0 1rem;
+  }
+
+  .site-nav {
+    gap: 1.25rem;
+  }
+
+  .site-nav__tab {
+    font-size: 0.8125rem;
+  }
+}
+
+/* Responsive: Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .site-header__inner {
+    padding: 0 2rem;
+  }
+
+  .site-nav {
+    gap: 2rem;
+  }
+
+  .site-nav__tab {
+    font-size: 0.9375rem;
+  }
+}
+
+/* ============================================
+   DOCS / QUICKSTART PAGE
+   ============================================ */
+
+/* Code block container */
+.code-block {
+  position: relative;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--color-border, #E5E7EB);
+  background: var(--color-surface, #FFFFFF);
+  overflow: hidden;
+  transition: border-color 120ms ease;
+}
+
+.code-block.hidden {
+    display: none
+}
+
+.code-block:hover {
+  border-color: var(--color-info-border, #D1D5DB);
+}
+
+[data-theme="dark"] .code-block {
+  background: var(--color-surface, #1A1A1A);
+  border-color: var(--color-border, #2A2A2A);
+}
+
+[data-theme="dark"] .code-block:hover {
+  border-color: var(--color-info-border, #374151);
+}
+
+/* Language label (top-left) */
+.code-block__label {
+  position: absolute;
+  top: 0.75rem;
+  left: 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--color-text-muted, #6B7280);
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+}
+
+/* Copy button (top-right) */
+.code-block__copy {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--color-text-muted, #6B7280);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0;
+  transition: color 120ms ease;
+}
+
+.code-block__copy:hover {
+  color: var(--color-text, #111111);
+}
+
+[data-theme="dark"] .code-block__copy:hover {
+  color: var(--color-text, #E5E5E5);
+}
+
+/* Code content area */
+.code-block__pre {
+  margin: 0;
+  padding: 2.5rem 1rem 1rem 1rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm, 0.875rem);
+  line-height: 1.7;
+  color: var(--color-text, #111111);
+  min-height: 4rem;
+}
+
+[data-theme="dark"] .code-block__pre {
+  color: var(--color-text, #E5E5E5);
+}
+
+/* Inline code (single line, no label/copy) */
+.code-inline {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm, 0.875rem);
+  background: var(--color-surface, #FFFFFF);
+  border: 1px solid var(--color-border, #E5E7EB);
+  border-radius: var(--radius-sm, 4px);
+  padding: 0.5rem 0.75rem;
+  color: var(--color-text, #111111);
+}
+
+[data-theme="dark"] .code-inline {
+  background: var(--color-surface, #1A1A1A);
+  border-color: var(--color-border, #2A2A2A);
+  color: var(--color-text, #E5E5E5);
+}
+
+/* Docs tabs */
+.docs-tab {
+  padding-bottom: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm, 0.875rem);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.docs-tab--active {
+  font-weight: 500;
+  color: var(--color-text, #111111);
+  border-bottom: 2px solid var(--color-accent, #10B981);
+}
+
+.docs-tab--inactive {
+  font-weight: 400;
+  color: var(--color-text-muted, #6B7280);
+  border-bottom: 2px solid transparent;
+}
+
+.docs-tab--inactive:hover {
+  color: var(--color-text, #111111);
+}
+
+[data-theme="dark"] .docs-tab--active {
+  color: var(--color-text, #E5E5E5);
+  border-bottom-color: var(--color-accent, #34D399);
+}
+
+[data-theme="dark"] .docs-tab--inactive:hover {
+  color: var(--color-text, #E5E5E5);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 767px) {
+  .docs-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .docs-section-spacing {
+    margin-top: 3rem;
+  }
+
+  .docs-title {
+    font-size: 1.5rem;
+  }
+
+  .code-block {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}
+
+/* Google Login Button - custom styled to match GitHub button */
+.google-login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1rem;
+  background-color: #ffffff;
+  color: #24292e;
+  border: 1px solid #d0d7de;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  width: 100%;
+  max-width: 368px;
+  text-decoration: none;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.google-login-btn:hover {
+  background-color: #f6f8fa;
+  border-color: #c9d1d9;
+}
+
+[data-theme="dark"] .google-login-btn {
+  background-color: #21262d;
+  color: #f0f0f0;
+  border-color: #30363d;
+}
+
+[data-theme="dark"] .google-login-btn:hover {
+  background-color: #30363d;
+  border-color: #484f58;
+}
+
+/* GitHub Login Button */
+.github-login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1rem;
+  background-color: #ffffff;
+  color: #24292e;
+  border: 1px solid #d0d7de;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  width: 100%;
+  max-width: 368px;
+  text-decoration: none;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.github-login-btn:hover {
+  background-color: #f6f8fa;
+  border-color: #c9d1d9;
+}
+
+[data-theme="dark"] .github-login-btn {
+  background-color: #21262d;
+  color: #f0f0f0;
+  border: 1px solid #30363d;
+}
+
+[data-theme="dark"] .github-login-btn:hover {
+  background-color: #30363d;
+  border-color: #484f58;
+}
+
+/* ============================================
+   SITE FOOTER
+   ============================================ */
+
+.site-footer {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: 1rem 1.5rem 5rem;
+  border-top: 1px solid var(--color-border, #E5E7EB);
+  background: var(--color-bg, #F5F5F5);
+  margin-top: 4rem;
+  gap: 1rem;
+}
+
+[data-theme="dark"] .site-footer {
+  border-top-color: var(--color-border, #2A2A2A);
+  background: var(--color-bg, #121212);
+}
+
+/* Left section - logo + copyright */
+.site-footer__left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Logo - half size */
+.site-footer__logo {
+  height: 70px;
+  width: auto;
+}
+
+.site-footer__logo--light {
+  display: block;
+}
+
+.site-footer__logo--dark {
+  display: none;
+}
+
+[data-active-theme="dark"] .site-footer__logo--light {
+  display: none;
+}
+
+[data-active-theme="dark"] .site-footer__logo--dark {
+  display: block;
+}
+
+/* Social - centered */
+.site-footer__social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.site-footer__social a {
+  color: var(--color-text-muted, #6B7280);
+  transition: color 150ms ease;
+}
+
+.site-footer__social a:hover {
+  color: var(--color-text, #111111);
+}
+
+[data-theme="dark"] .site-footer__social a:hover {
+  color: var(--color-text, #E5E5E5);
+}
+
+/* Links - right aligned, single line */
+.site-footer__links {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.site-footer__link {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-muted, #6B7280);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.site-footer__link:hover {
+  color: var(--color-text, #111111);
+}
+
+[data-theme="dark"] .site-footer__link:hover {
+  color: var(--color-text, #E5E5E5);
+}
+
+.site-footer__sep {
+  color: var(--color-text-muted, #6B7280);
+}
+
+/* Copyright - inline with logo */
+.site-footer__copy {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #6B7280);
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 639px) {
+  .site-footer {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 1.5rem 1rem;
+  }
+
+  .site-footer__left {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .site-footer__links {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+/* ============================================
+   ADMIN PAGE ANIMATIONS
+   ============================================ */
+
+/* Page content fade in on mount */
+.admin-page-enter {
+  animation: heroFadeIn 0.3s ease-out forwards;
+}
+
+/* Panel slide down for forms */
+@keyframes adminSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-panel-enter {
+  animation: adminSlideDown 0.15s ease-out forwards;
+}
+
+/* Row highlight on edit */
+.admin-row-editing {
+  transition: background-color 0.15s ease;
+}
+

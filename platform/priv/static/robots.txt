@@ -1,0 +1,12 @@
+User-agent: *
+
+# Block private/auth-only and non-indexable areas
+Disallow: /portal
+Disallow: /settings
+Disallow: /invite
+Disallow: /api
+Disallow: /agent
+Disallow: /webhooks
+
+# Sitemap location
+Sitemap: https://openllp.dev/sitemap.xml

@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+
+cd -P -- "$(dirname -- "$0")"
+
+if [ "${AUTO_MIGRATE:-}" = "true" ]; then
+    echo "AUTO_MIGRATE is set, running migrations..."
+    ./platform eval Platform.Release.migrate
+fi
+
+PHX_SERVER=true exec ./platform start

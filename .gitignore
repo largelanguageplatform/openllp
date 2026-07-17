@@ -1,0 +1,23 @@
+# Secrets / local env — never commit
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+*.swp
+
+# Elixir / Phoenix build & deps
+/platform/_build/
+/platform/deps/
+/platform/*.ez
+/platform/erl_crash.dump
+/platform/priv/static/assets/
+/platform/priv/static/cache_manifest.json
+
+# Runtime / generated
+*.log
+*.pdf
+
+# Compiled binaries
+*.beam

@@ -1,0 +1,16 @@
+# Gitleaks config for OpenLLP.
+# The three allowlisted matches below are intentional local-only throwaways
+# (standard committed Phoenix dev/test config), each annotated in-file with
+# instructions to generate your own. They have never protected a real
+# deployment.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Committed local-dev throwaway secret_key_base values"
+paths = [
+  '''platform/config/dev\.exs''',
+  '''platform/config/test\.exs''',
+]
+regexTarget = "line"
+regexes = ['''SECRET_KEY_BASE: "98SH5SS6''']

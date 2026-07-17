@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "1099-NEC",
+  "type": "object",
+  "required": ["tax_year", "corrected", "payer", "recipient", "nonemployee_compensation", "federal_tax_withheld", "fatca_filing"],
+  "properties": {
+    "tax_year": { "type": "integer", "description": "Tax year (e.g. 2025)" },
+    "corrected": { "type": "boolean", "description": "Whether this is a corrected form" },
+    "payer": {
+      "type": "object",
+      "required": ["name", "address", "tin"],
+      "properties": {
+        "name": { "type": "string", "description": "Payer's legal business name" },
+        "address": { "type": "string", "description": "Full payer address block: street, city, state ZIP, and phone — all on one line" },
+        "tin": { "type": "string", "description": "Payer's EIN in format XX-XXXXXXX (e.g. 84-2938471)" },
+        "phone": { "type": "string", "description": "Payer's phone number (e.g. (408) 555-0100)" }
+      }
+    },
+    "recipient": {
+      "type": "object",
+      "required": ["name", "tin", "street_address", "city_state_zip"],
+      "properties": {
+        "name": { "type": "string", "description": "Recipient's full legal name" },
+        "tin": { "type": "string", "description": "Recipient's SSN in format XXX-XX-XXXX (e.g. 487-65-9321)" },
+        "street_address": { "type": "string", "description": "Recipient's street address including apt/suite (e.g. 456 Oak Avenue, Apt 2B)" },
+        "city_state_zip": { "type": "string", "description": "Recipient's city, state, and ZIP (e.g. Palo Alto, CA 94301)" }
+      }
+    },
+    "account_number": { "type": "string", "description": "Optional account number for payer's records" },
+    "fatca_filing": { "type": "boolean", "description": "FATCA filing requirement checkbox" },
+    "nonemployee_compensation": { "type": "number", "description": "Box 1: Nonemployee compensation amount" },
+    "direct_sales": { "type": "boolean", "description": "Box 2: Payer made direct sales totaling $5,000 or more" },
+    "federal_tax_withheld": { "type": "number", "description": "Box 4: Federal income tax withheld" },
+    "state_tax_info": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["state", "state_income", "state_tax_withheld"],
+        "properties": {
+          "state": { "type": "string", "description": "Two-letter state code (e.g. CA)" },
+          "state_id": { "type": "string", "description": "State payer's identification number" },
+          "state_income": { "type": "number", "description": "Box 7: State income" },
+          "state_tax_withheld": { "type": "number", "description": "State tax withheld" }
+        }
+      }
+    }
+  }
+}

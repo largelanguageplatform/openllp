@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Bank Statement",
+  "type": "object",
+  "required": ["bank", "account_holder", "account_number", "account_type", "statement_period", "summary", "transactions"],
+  "properties": {
+    "bank": {
+      "type": "object",
+      "required": ["name", "address"],
+      "properties": {
+        "name": { "type": "string", "description": "Bank name (e.g. JPMorgan Chase Bank, N.A.)" },
+        "address": { "type": "string", "description": "Bank mailing address on one line" },
+        "phone": { "type": "string", "description": "Customer service phone (e.g. 1-800-935-9935)" },
+        "website": { "type": "string", "description": "Bank website (e.g. Chase.com)" }
+      }
+    },
+    "account_holder": {
+      "type": "object",
+      "required": ["name", "address"],
+      "properties": {
+        "name": { "type": "string", "description": "Full name of account holder" },
+        "address": { "type": "string", "description": "Mailing address on one line" }
+      }
+    },
+    "account_number": { "type": "string", "description": "Partially masked account number (e.g. xxxxx100899010)" },
+    "account_type": { "type": "string", "description": "Account type: Chase Total Checking, Savings, etc." },
+    "statement_period": {
+      "type": "object",
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "string", "description": "Start date (e.g. June 9, 2025)" },
+        "end": { "type": "string", "description": "End date (e.g. July 7, 2025)" }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": ["beginning_balance", "total_deposits", "total_withdrawals", "total_fees", "ending_balance"],
+      "properties": {
+        "beginning_balance": { "type": "number" },
+        "total_deposits": { "type": "number", "description": "Sum of all deposits and additions" },
+        "total_withdrawals": { "type": "number", "description": "Sum of all withdrawals (positive number)" },
+        "total_fees": { "type": "number", "description": "Sum of all fees (positive number, 0 if none)" },
+        "ending_balance": { "type": "number", "description": "beginning_balance + total_deposits - total_withdrawals - total_fees" }
+      }
+    },
+    "transactions": {
+      "type": "array",
+      "minItems": 15,
+      "items": {
+        "type": "object",
+        "required": ["date", "description", "category", "amount", "balance"],
+        "properties": {
+          "date": { "type": "string", "description": "Transaction posting date as MM/DD (e.g. 01/15)" },
+          "description": { "type": "string", "description": "Detailed transaction description with merchant name, location, reference numbers" },
+          "category": { "type": "string", "enum": ["Deposits and Additions", "ATM & Debit Card Withdrawals", "Electronic Withdrawals", "Other Withdrawals", "Fees"], "description": "Transaction category" },
+          "amount": { "type": "number", "description": "Transaction amount (always positive)" },
+          "balance": { "type": "number", "description": "Running account balance after this transaction" }
+        }
+      }
+    }
+  }
+}

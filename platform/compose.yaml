@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: platform
+      POSTGRES_PASSWORD: localdev
+      POSTGRES_DB: platform
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U platform" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - openllp-network
+  platform:
+    image: openllp/platform:latest
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      # The dashboard has NO login (single-tenant bootstrap mode): anyone who
+      # can reach this port has full access. Bind to a private interface
+      # (e.g. "127.0.0.1:80:4000") or front with your own auth proxy.
+      - "80:4000"
+    environment:
+      FLY_APP_NAME: "openllp"
+      FLY_PRIVATE_IP: "platform"
+      DATABASE_URL: "postgres://platform:localdev@db:5432/platform"
+      # Local-dev throwaway key. Generate your own with: mix phx.gen.secret
+      SECRET_KEY_BASE: "98SH5SS6HKbR5OUnMAG6ozU941Pw5pTZPgrIHuLTa9N4fT2OugEJ9JzQd2CO"
+      PHX_HOST: "localhost"
+      USE_HTTP: "true"
+      AUTO_MIGRATE: "true"
+    networks:
+      - openllp-network
+
+networks:
+  openllp-network:
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: 2001:db8::/64

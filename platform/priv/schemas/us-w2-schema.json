@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openllp.dev/schemas/tax/us-w2.json",
+  "title": "IRS Form W-2",
+  "description": "Wage and Tax Statement (IRS Form W-2). All box references correspond to the official 2025 IRS Form W-2.",
+  "type": "object",
+  "required": ["tax_year", "employer", "employee", "wages"],
+  "properties": {
+    "tax_year": {
+      "type": "integer",
+      "minimum": 2000,
+      "maximum": 2099,
+      "description": "Tax year for which this W-2 was issued"
+    },
+    "employer": {
+      "type": "object",
+      "description": "Employer identification (Boxes b, c)",
+      "required": ["ein", "name", "address"],
+      "properties": {
+        "ein": {
+          "type": "string",
+          "pattern": "^[0-9]{2}-[0-9]{7}$",
+          "description": "Box b — Employer Identification Number (EIN), format: XX-XXXXXXX"
+        },
+        "name": {
+          "type": "string",
+          "description": "Box c — Employer's name"
+        },
+        "address": { "$ref": "#/$defs/us_address" },
+        "state_id": {
+          "type": "string",
+          "description": "Box 15 — Employer's state ID number"
+        }
+      }
+    },
+    "employee": {
+      "type": "object",
+      "description": "Employee identification (Boxes a, d, e, f)",
+      "required": ["ssn", "name", "address"],
+      "properties": {
+        "ssn": {
+          "type": "string",
+          "pattern": "^[0-9]{3}-[0-9]{2}-[0-9]{4}$",
+          "description": "Box a — Employee's Social Security Number, format: XXX-XX-XXXX"
+        },
+        "name": {
+          "type": "object",
+          "required": ["first_name", "last_name"],
+          "description": "Boxes e — Employee's name",
+          "properties": {
+            "first_name": { "type": "string" },
+            "middle_initial": { "type": "string", "maxLength": 1 },
+            "last_name": { "type": "string" },
+            "suffix": { "type": "string", "enum": ["Jr.", "Sr.", "II", "III", "IV"] }
+          }
+        },
+        "address": { "$ref": "#/$defs/us_address" }
+      }
+    },
+    "control_number": {
+      "type": "string",
+      "description": "Box d — Control number (employer's internal use)"
+    },
+    "wages": {
+      "type": "object",
+      "description": "Wage and compensation fields (Boxes 1–8)",
+      "required": ["box1_wages_tips_other", "box3_ss_wages", "box5_medicare_wages"],
+      "properties": {
+        "box1_wages_tips_other": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 1 — Wages, tips, other compensation"
+        },
+        "box2_federal_tax_withheld": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 2 — Federal income tax withheld"
+        },
+        "box3_ss_wages": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 3 — Social Security wages"
+        },
+        "box4_ss_tax_withheld": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 4 — Social Security tax withheld"
+        },
+        "box5_medicare_wages": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 5 — Medicare wages and tips"
+        },
+        "box6_medicare_tax_withheld": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 6 — Medicare tax withheld"
+        },
+        "box7_ss_tips": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 7 — Social Security tips"
+        },
+        "box8_allocated_tips": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 8 — Allocated tips"
+        }
+      }
+    },
+    "benefits": {
+      "type": "object",
+      "description": "Benefits and deferred compensation (Boxes 10–11)",
+      "properties": {
+        "box10_dependent_care": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 10 — Dependent care benefits"
+        },
+        "box11_nonqualified_plans": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Box 11 — Nonqualified plans"
+        }
+      }
+    },
+    "box12": {
+      "type": "array",
+      "maxItems": 4,
+      "description": "Box 12a–12d — Coded entries for deferred compensation, benefits, and other items",
+      "items": {
+        "type": "object",
+        "required": ["code", "amount"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "A", "B", "C", "D", "E", "F", "G", "H",
+              "J", "K", "L", "M", "N", "P", "Q", "R",
+              "S", "T", "V", "W", "Y", "Z",
+              "AA", "BB", "DD", "EE", "FF", "GG", "HH", "II"
+            ],
+            "description": "Box 12 code (A=Uncollected SS tax on tips, C=Group-term life, D=401(k), DD=Health coverage cost, W=HSA contributions, etc.)"
+          },
+          "amount": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Dollar amount for the corresponding code"
+          }
+        }
+      }
+    },
+    "box13": {
+      "type": "object",
+      "description": "Box 13 — Checkbox indicators",
+      "properties": {
+        "statutory_employee": {
+          "type": "boolean",
+          "default": false,
+          "description": "Box 13 — Statutory employee"
+        },
+        "retirement_plan": {
+          "type": "boolean",
+          "default": false,
+          "description": "Box 13 — Retirement plan participant"
+        },
+        "third_party_sick_pay": {
+          "type": "boolean",
+          "default": false,
+          "description": "Box 13 — Third-party sick pay"
+        }
+      }
+    },
+    "box14_other": {
+      "type": "array",
+      "description": "Box 14a — Other items reported by employer (e.g., union dues, uniform payments, health insurance)",
+      "items": {
+        "type": "object",
+        "required": ["label", "amount"],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Description of the item"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Dollar amount"
+          }
+        }
+      }
+    },
+    "box14b_tip_code": {
+      "type": "string",
+      "description": "Box 14b — Treasury Tipped Occupation Code(s)"
+    },
+    "state_local": {
+      "type": "array",
+      "maxItems": 2,
+      "description": "Boxes 15–20 — State and local tax information (up to 2 states/localities)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "box15_state": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$",
+            "description": "Box 15 — Two-letter state abbreviation"
+          },
+          "box15_state_id": {
+            "type": "string",
+            "description": "Box 15 — Employer's state ID number"
+          },
+          "box16_state_wages": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Box 16 — State wages, tips, etc."
+          },
+          "box17_state_tax": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Box 17 — State income tax withheld"
+          },
+          "box18_local_wages": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Box 18 — Local wages, tips, etc."
+          },
+          "box19_local_tax": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Box 19 — Local income tax withheld"
+          },
+          "box20_locality": {
+            "type": "string",
+            "description": "Box 20 — Locality name"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "us_address": {
+      "type": "object",
+      "required": ["street", "city", "state", "zip"],
+      "properties": {
+        "street": { "type": "string", "description": "Street address (line 1)" },
+        "street2": { "type": "string", "description": "Street address (line 2, optional)" },
+        "city": { "type": "string" },
+        "state": { "type": "string", "pattern": "^[A-Z]{2}$", "description": "Two-letter state code" },
+        "zip": { "type": "string", "pattern": "^[0-9]{5}(-[0-9]{4})?$", "description": "ZIP or ZIP+4" }
+      }
+    }
+  }
+}
