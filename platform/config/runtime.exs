@@ -101,7 +101,7 @@ if config_env() in [:prod, :debug] do
 
   endpoint_url =
     if use_http?,
-      do: [host: host, port: 80, scheme: "http"],
+      do: [host: host, port: port, scheme: "http"],
       else: [host: host, port: 443, scheme: "https"]
 
   config :platform, :dns_cluster_query, dns_cluster_query

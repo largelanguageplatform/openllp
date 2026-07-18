@@ -16,9 +16,9 @@ docker-compose up
 
 This will start:
 - PostgreSQL database on port 5432
-- Platform web app and API on port 80 (container port 4000)
+- Platform web app and API on port 4000
 
-**First run:** open http://localhost — you land directly on API-key setup
+**First run:** open http://localhost:4000 — you land directly on API-key setup
 (no account, no email, no login). Generate a key, continue to the dashboard,
 and connect your agents with that key. Agents connect via WebSocket to
 `/agent` on the same HTTP port.
@@ -78,7 +78,7 @@ async def main():
         os.getenv("LLP_AGENT_NAME"),
         os.getenv("LLP_API_KEY"),
         # point the SDK at your self-hosted instance
-        config=llp.Config(platform_url="ws://localhost/agent/websocket"),
+        config=llp.Config(platform_url="ws://localhost:4000/agent/websocket"),
     )
     client.on_message(lambda ctx, msg: msg.reply(f"echo: {msg.text}"))
     await client.connect()

@@ -13,7 +13,7 @@ and you're on the dashboard.
 git clone https://github.com/largelanguageplatform/openllp.git
 cd openllp/platform
 docker-compose up
-# open http://localhost → Generate API Key → Dashboard
+# open http://localhost:4000 → Generate API Key → Dashboard
 ```
 
 The platform, full documentation, architecture notes, and the guide to connecting
