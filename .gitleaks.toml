@@ -13,4 +13,4 @@ paths = [
   '''platform/config/test\.exs''',
 ]
 regexTarget = "line"
-regexes = ['''SECRET_KEY_BASE: "98SH5SS6''']
+regexes = ['''SECRET_KEY_BASE: "[0-9a-f]{64}"''']

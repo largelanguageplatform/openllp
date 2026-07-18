@@ -29,7 +29,7 @@ services:
       FLY_PRIVATE_IP: "platform"
       DATABASE_URL: "postgres://platform:localdev@db:5432/platform"
       # Local-dev throwaway key. Generate your own with: mix phx.gen.secret
-      SECRET_KEY_BASE: "98SH5SS6HKbR5OUnMAG6ozU941Pw5pTZPgrIHuLTa9N4fT2OugEJ9JzQd2CO"
+      SECRET_KEY_BASE: "14c20cd611b0d160bd3d6cc8716862b66132ba1cb4bcf1ddfe509b08e10eca75"
       PHX_HOST: "localhost"
       USE_HTTP: "true"
       AUTO_MIGRATE: "true"

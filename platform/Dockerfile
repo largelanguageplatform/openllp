@@ -33,7 +33,10 @@ COPY config/runtime.exs config/
 COPY rel rel
 RUN mix release
 
-FROM alpine:3.19 AS runner
+# Runtime Alpine MUST match the builder image's Alpine major/minor
+# (elixir:1.16-alpine is currently Alpine 3.24): the OTP crypto NIF links
+# against the builder's OpenSSL and fails to load on older libcrypto.
+FROM alpine:3.24 AS runner
 
 RUN apk add --no-cache \
     libstdc++ \
