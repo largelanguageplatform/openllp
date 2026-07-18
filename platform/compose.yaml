@@ -1,8 +1,11 @@
 services:
   db:
     image: postgres:16-alpine
-    ports:
-      - "5432:5432"
+    # Not published to the host: the app reaches it on the internal network,
+    # so an existing Postgres on your machine can never conflict. To inspect
+    # the DB from the host, uncomment (localhost-only):
+    #   ports:
+    #     - "127.0.0.1:5432:5432"
     environment:
       POSTGRES_USER: platform
       POSTGRES_PASSWORD: localdev
