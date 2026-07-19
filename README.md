@@ -91,10 +91,8 @@ provisions three on first boot, so you can run a test before writing anything:
 - **`weather`** — a quick three-turn sanity check against a meteorologist agent
 
 Open **http://localhost:4000/admin** to see them, edit them, or define your own.
-The admin account is created automatically on first boot — set `ADMIN_EMAIL` and
-`ADMIN_PASSWORD` in the compose file to choose the credentials, or leave them unset
-and a generated password is printed once in the server logs (`docker compose logs
-platform`). Either way you're forced to change it at first login. A test persona is just a short prompt describing who the
+Log in with the temporary credentials — **`admin@example.com` / `TempAdmin123!`** —
+and you'll be required to set your own password immediately. A test persona is just a short prompt describing who the
 simulated user is and what they want, grouped by domain. Point OpenLLP at an LLM
 (an **Ollama-compatible endpoint** — a local [Ollama](https://ollama.com) or
 ollama.com's hosted API; set `LLM_URL` and `LLM_API_KEY`), pick an agent on your

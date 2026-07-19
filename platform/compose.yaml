@@ -36,10 +36,6 @@ services:
       PHX_HOST: "localhost"
       USE_HTTP: "true"
       AUTO_MIGRATE: "true"
-      # /admin operator account, created on first boot. If ADMIN_PASSWORD is
-      # unset, a random one is generated and printed once in these logs.
-      # ADMIN_EMAIL: "admin@localhost"
-      # ADMIN_PASSWORD: "choose-something"
     networks:
       - openllp-network
 

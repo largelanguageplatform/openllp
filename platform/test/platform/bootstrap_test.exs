@@ -31,7 +31,7 @@ defmodule Platform.BootstrapTest do
     Bootstrap.ensure!()
 
     assert [admin] = Repo.all(Platform.Admin.User)
-    assert admin.email == "admin@localhost"
+    assert admin.email == "admin@example.com"
     assert Platform.Admin.User.must_change_password?(admin)
   end
 

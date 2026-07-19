@@ -14,8 +14,6 @@ defmodule Platform.Bootstrap do
 
   import Ecto.Query, only: [from: 2]
 
-  require Logger
-
   alias Platform.Account.Organization
   alias Platform.Admin.DomainPersona
   alias Platform.Admin.User, as: AdminUser
@@ -68,43 +66,16 @@ defmodule Platform.Bootstrap do
 
   defp org_name, do: System.get_env("BOOTSTRAP_ORG_NAME", "local")
 
-  # Provisions the /admin operator account when none exists. Email and password
-  # come from ADMIN_EMAIL / ADMIN_PASSWORD; without ADMIN_PASSWORD a random one
-  # is generated and printed ONCE in the boot log. Either way the first login
-  # forces a password change (password_changed_at: nil).
+  # Provisions the /admin operator account when none exists, with the
+  # documented temporary credentials (see README). password_changed_at: nil
+  # forces a password change on first login.
   defp ensure_admin do
     if Repo.aggregate(AdminUser, :count) == 0 do
-      email = System.get_env("ADMIN_EMAIL", "admin@localhost")
-
-      {password, generated?} =
-        case System.get_env("ADMIN_PASSWORD") do
-          nil -> {Base.encode64(:crypto.strong_rand_bytes(12), padding: false), true}
-          set -> {set, false}
-        end
-
       Repo.insert!(%AdminUser{
-        email: email,
-        hashed_password: Argon2.hash_pwd_salt(password),
+        email: "admin@example.com",
+        hashed_password: Argon2.hash_pwd_salt("TempAdmin123!"),
         password_changed_at: nil
       })
-
-      if generated? do
-        Logger.warning("""
-
-        ==========================================================
-        Admin account created for http://localhost:4000/admin
-
-          email:    #{email}
-          password: #{password}
-
-        You will be required to change this password on first
-        login. To choose your own instead, set ADMIN_EMAIL and
-        ADMIN_PASSWORD before first boot.
-        ==========================================================
-        """)
-      else
-        Logger.info("Admin account created for #{email} (password from ADMIN_PASSWORD)")
-      end
     end
 
     :ok
