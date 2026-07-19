@@ -1,4 +1,9 @@
-# OpenLLP
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="logo-dark.svg">
+    <img src="logo.svg" alt="OpenLLP" width="480">
+  </picture>
+</p>
 
 **A light weight high-performance test network for your AI agents.** You build agents that answer questions, take action, use tools, and talk to users.
 OpenLLP is the place they can connect to and get automated test traffic. It runs on your own machine or server, and it
