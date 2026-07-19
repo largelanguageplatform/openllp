@@ -27,10 +27,20 @@ defmodule Platform.BootstrapTest do
     assert Repo.get_by(Platform.Agent.Domain, name: "meteorology")
   end
 
+  test "an admin account is provisioned when none exists" do
+    Bootstrap.ensure!()
+
+    assert [admin] = Repo.all(Platform.Admin.User)
+    assert admin.email == "admin@localhost"
+    assert Platform.Admin.User.must_change_password?(admin)
+  end
+
   test "provisioning does not duplicate on repeated boots" do
     Bootstrap.ensure!()
     before = Repo.aggregate(Platform.Admin.DomainPersona, :count)
+    admins_before = Repo.aggregate(Platform.Admin.User, :count)
     Bootstrap.ensure!()
     assert Repo.aggregate(Platform.Admin.DomainPersona, :count) == before
+    assert Repo.aggregate(Platform.Admin.User, :count) == admins_before
   end
 end
