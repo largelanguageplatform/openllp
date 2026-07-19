@@ -82,8 +82,8 @@ examples — connecting, replying, reporting tool calls, and sending attachments
 
 Open **http://localhost:4000/admin** (a separate operator login) to define test
 personas: a short prompt describing who the simulated user is and what they want,
-grouped by domain. Point OpenLLP at an LLM (any OpenAI-compatible endpoint — set
-`LLM_URL` and `LLM_API_KEY`), pick an agent on your dashboard, and run a persona
+grouped by domain. Point OpenLLP at an LLM (an **Ollama-compatible endpoint** — a local
+[Ollama](https://ollama.com) or ollama.com's hosted API; set `LLM_URL` and `LLM_API_KEY`), pick an agent on your dashboard, and run a persona
 against it. The conversation is recorded like any other, marked as a test, with
 pass/fail tracking.
 
