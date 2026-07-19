@@ -16,4 +16,21 @@ defmodule Platform.BootstrapTest do
     org = Bootstrap.ensure!()
     assert Bootstrap.organization!().id == org.id
   end
+
+  test "example chaos personas are provisioned when the table is empty" do
+    Bootstrap.ensure!()
+
+    names = Repo.all(Platform.Admin.DomainPersona) |> Enum.map(& &1.name) |> Enum.sort()
+    assert "invoice" in names
+    assert "tax_noob" in names
+    assert "weather" in names
+    assert Repo.get_by(Platform.Agent.Domain, name: "meteorology")
+  end
+
+  test "provisioning does not duplicate on repeated boots" do
+    Bootstrap.ensure!()
+    before = Repo.aggregate(Platform.Admin.DomainPersona, :count)
+    Bootstrap.ensure!()
+    assert Repo.aggregate(Platform.Admin.DomainPersona, :count) == before
+  end
 end

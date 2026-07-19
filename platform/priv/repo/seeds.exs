@@ -158,57 +158,6 @@ admin2 = %AdminUser{
 Platform.Repo.insert!(admin1)
 Platform.Repo.insert!(admin2)
 
-weather =
-  %Platform.Agent.Domain{
-    parent_domain_id: 0,
-    name: "meteorology",
-    description: """
-    Meteorology is the scientific study of the Earth's atmosphere, focusing on weather processes,
-    forecasting, and atmospheric phenomena, primarily within the troposphere.
-    """
-  }
-  |> Platform.Repo.insert!()
-
-# personas
-personas = [
-  # %DomainPersona{
-  ## finance
-  # domain_id: 1,
-  # name: "tax_noob",
-  # prompt_text: """
-  # Let's roleplay: You are a taxpayer desperate to file your taxes by the upcoming deadline. You are
-  # overwhelmed and confused by all of the paperwork you have to fill out and need
-  # to ask some clarifying questions. I am going to provide you a financial agent with a description
-  # of what they can do. You have exercised ISO stock options and don't understand the tax implications
-  # and what forms to fill out. If the answer is unclear, provide follow up questions. You MUST be
-  # succinct in your questioning as the financial agent is short on time and has many clients to see this week.
-  # """,
-  # max_turns: 5,
-  # status: :enabled
-  # },
-  %DomainPersona{
-    domain_id: weather.id,
-    name: "weather",
-    prompt_text: """
-    You are talking to a meteorologist and need to know what the weather is currently in San Francisco.
-    """,
-    max_turns: 3,
-    status: :enabled
-  },
-  %DomainPersona{
-    domain_id: 1,
-    name: "invoice",
-    prompt_text: """
-    You work in finance for a company called Construction Corporation. You are using a financial agent to look over
-    your invoices. You will need to generate a pdf of an invoice and ask questions about the invoice to
-    ensure the agent understands what it's looking at. You MUST be succinct in your questioning as the
-    financial agent is short on time and has many clients to see this week.
-    """,
-    max_turns: 5,
-    status: :enabled
-  }
-]
-
-for persona <- personas do
-  Platform.Repo.insert!(persona)
-end
+# Example domains and chaos-test personas (weather, invoice, tax_noob) are
+# provisioned by Platform.Bootstrap at first boot — they are not seeded here
+# to keep seeds re-runnable next to a booted app.

@@ -1,24 +1,20 @@
 # OpenLLP
 
-**A home base for your AI agents.** You build agents — programs powered by language
-models that answer questions, use tools, and talk to people or to each other.
-OpenLLP is the place they connect to. It runs on your own machine or server, and it
+**A light weight high-performance test network for your AI agents.** You build agents that answer questions, take action, use tools, and talk to users.
+OpenLLP is the place they can connect to and get automated test traffic. It runs on your own machine or server, and it
 gives you three things that are hard to get when agents just run loose:
 
-1. **A live dashboard.** Every agent that connects shows up on a portal page. You can
-   see which ones are online and open a live view of everything each one says,
-   receives, and every tool call it makes — as it happens.
+1. **A test harness.** OpenLLP can play the *other side* of a conversation: it spins
+   up simulated users (driven by an LLM you configure) that interrogate your agent —
+   a confused taxpayer, an impatient customer, someone with a stack of invoices —
+   and records how your agent holds up. You can define any test persona yourself.
 2. **A shared network.** Agents connect to OpenLLP over a WebSocket and can send
    messages to each other by name. OpenLLP routes the messages, keeps the history,
    and records the whole conversation.
-3. **A test harness.** OpenLLP can play the *other side* of a conversation: it spins
-   up simulated users (driven by an LLM you configure) that interrogate your agent —
-   a confused taxpayer, an impatient customer, someone with a stack of invoices —
-   and records how your agent holds up. You define these test personas yourself.
+3. **A live dashboard.** Every agent that connects shows up on a portal page. You can
+   see which ones are online and open a live view of everything each one says,
+   receives, and every tool call it makes — as it happens.
 
-There are **no accounts, no email, and no login**. The only credential in the system
-is an API key for your agents. Clone it, start it, and you're on the dashboard in
-under a minute.
 
 ## Quick start
 
