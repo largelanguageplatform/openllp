@@ -23,7 +23,7 @@ defmodule PlatformWeb.AdminAuth do
     |> renew_session()
     |> put_session(:admin_token, token)
     |> put_resp_cookie(@session_cookie, token, @session_options)
-    |> redirect(to: ~p"/sys-ctrl-9f8e7d6c/prompts")
+    |> redirect(to: ~p"/admin/prompts")
   end
 
   def log_out_admin(conn) do
@@ -34,7 +34,7 @@ defmodule PlatformWeb.AdminAuth do
     conn
     |> renew_session()
     |> delete_resp_cookie(@session_cookie)
-    |> redirect(to: ~p"/sys-ctrl-9f8e7d6c/login")
+    |> redirect(to: ~p"/admin/login")
   end
 
   def fetch_current_admin(conn, _opts) do
@@ -56,7 +56,7 @@ defmodule PlatformWeb.AdminAuth do
       conn
     else
       conn
-      |> redirect(to: ~p"/sys-ctrl-9f8e7d6c/login")
+      |> redirect(to: ~p"/admin/login")
       |> halt()
     end
   end
@@ -66,7 +66,7 @@ defmodule PlatformWeb.AdminAuth do
 
     if admin && Admin.must_change_password?(admin) do
       conn
-      |> redirect(to: ~p"/sys-ctrl-9f8e7d6c/change-password")
+      |> redirect(to: ~p"/admin/change-password")
       |> halt()
     else
       conn
@@ -76,7 +76,7 @@ defmodule PlatformWeb.AdminAuth do
   def redirect_if_admin_authenticated(conn, _opts) do
     if conn.assigns[:current_admin] do
       conn
-      |> redirect(to: ~p"/sys-ctrl-9f8e7d6c/prompts")
+      |> redirect(to: ~p"/admin/prompts")
       |> halt()
     else
       conn
@@ -118,7 +118,7 @@ defmodule PlatformWeb.AdminAuth do
       socket =
         socket
         |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
-        |> Phoenix.LiveView.redirect(to: ~p"/sys-ctrl-9f8e7d6c/login")
+        |> Phoenix.LiveView.redirect(to: ~p"/admin/login")
 
       {:halt, socket}
     end
@@ -130,10 +130,10 @@ defmodule PlatformWeb.AdminAuth do
 
     cond do
       is_nil(admin) ->
-        {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/sys-ctrl-9f8e7d6c/login")}
+        {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/admin/login")}
 
       Admin.must_change_password?(admin) ->
-        {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/sys-ctrl-9f8e7d6c/change-password")}
+        {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/admin/change-password")}
 
       true ->
         {:cont, socket}
@@ -144,7 +144,7 @@ defmodule PlatformWeb.AdminAuth do
     socket = mount_current_admin(socket, session)
 
     if socket.assigns.current_admin do
-      {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/sys-ctrl-9f8e7d6c/prompts")}
+      {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/admin/prompts")}
     else
       {:cont, socket}
     end

@@ -53,7 +53,7 @@ defmodule PlatformWeb.AdminLive.Prompts do
       </nav>
       <div class="p-4 border-t border-zinc-800">
         <.link
-          href={~p"/sys-ctrl-9f8e7d6c/logout"}
+          href={~p"/admin/logout"}
           method="delete"
           class="text-zinc-500 hover:text-white text-sm transition-all duration-150"
         >

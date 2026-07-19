@@ -16,7 +16,7 @@ defmodule PlatformWeb.AdminLive.Login do
         <.form
           for={@form}
           id="admin-login-form"
-          action={~p"/sys-ctrl-9f8e7d6c/login"}
+          action={~p"/admin/login"}
           method="post"
           phx-submit="validate_and_submit"
           phx-trigger-action={@trigger_submit}

@@ -63,7 +63,7 @@ defmodule PlatformWeb.Router do
 
   ## Admin panel routes (non-guessable path)
   # Public admin routes - login page and POST
-  scope "/sys-ctrl-9f8e7d6c", PlatformWeb do
+  scope "/admin", PlatformWeb do
     pipe_through [:admin_browser]
 
     live_session :redirect_if_admin_authenticated,
@@ -75,7 +75,7 @@ defmodule PlatformWeb.Router do
   end
 
   # Admin auth routes - requires login, no password change requirement
-  scope "/sys-ctrl-9f8e7d6c", PlatformWeb do
+  scope "/admin", PlatformWeb do
     pipe_through [:admin_browser, :require_authenticated_admin]
 
     live_session :require_authenticated_admin,
@@ -87,7 +87,7 @@ defmodule PlatformWeb.Router do
   end
 
   # Admin routes - requires login AND password changed
-  scope "/sys-ctrl-9f8e7d6c", PlatformWeb do
+  scope "/admin", PlatformWeb do
     pipe_through [:admin_browser, :require_authenticated_admin]
 
     live_session :require_admin_password_changed,

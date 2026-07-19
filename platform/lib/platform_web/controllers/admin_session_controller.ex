@@ -9,7 +9,7 @@ defmodule PlatformWeb.AdminSessionController do
       nil ->
         conn
         |> put_flash(:error, "Invalid credentials")
-        |> redirect(to: ~p"/sys-ctrl-9f8e7d6c/login")
+        |> redirect(to: ~p"/admin/login")
 
       admin ->
         AdminAuth.log_in_admin(conn, admin)

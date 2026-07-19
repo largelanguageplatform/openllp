@@ -123,7 +123,7 @@ defmodule PlatformWeb.AdminLive.ChangePassword do
           {:noreply,
            socket
            |> put_flash(:info, "Password changed successfully")
-           |> redirect(to: ~p"/sys-ctrl-9f8e7d6c/login")}
+           |> redirect(to: ~p"/admin/login")}
 
         {:error, changeset} ->
           {:noreply, assign_form(socket, changeset)}

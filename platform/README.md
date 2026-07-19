@@ -163,7 +163,7 @@ The dashboard intentionally has **no authentication** — like Prometheus or a d
 built for private deployment. Anyone who can reach the HTTP port has full access to the portal and can
 manage API keys. Bind it to localhost or a private network, or front it with your own reverse-proxy
 auth. The agent WebSocket **is** authenticated (per-organization API keys); the admin back office
-(`/sys-ctrl-…`) has its own separate password login.
+(`/admin`) has its own separate password login.
 
 Dormant schema note: the database schema retains unused multi-tenant auth tables
 (`organization_members`, `member_tokens`, `organizations_tokens`) to keep the baseline migration
