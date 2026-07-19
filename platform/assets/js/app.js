@@ -400,33 +400,6 @@ Hooks.HeroCarousel = {
   }
 }
 
-Hooks.Turnstile = {
-  mounted() {
-    const siteKey = this.el.dataset.sitekey
-
-    // Load Turnstile script if not already loaded
-    if (!window.turnstile) {
-      const script = document.createElement('script')
-      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
-      script.async = true
-      script.defer = true
-      script.onload = () => this.renderWidget(siteKey)
-      document.head.appendChild(script)
-    } else {
-      this.renderWidget(siteKey)
-    }
-  },
-
-  renderWidget(siteKey) {
-    window.turnstile.render(this.el, {
-      sitekey: siteKey,
-      theme: 'dark',
-      callback: (token) => {
-        document.getElementById('cf-turnstile-response').value = token
-      }
-    })
-  }
-}
 
 Hooks.OrgNudge = {
   mounted() {

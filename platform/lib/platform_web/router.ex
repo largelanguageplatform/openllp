@@ -27,8 +27,8 @@ defmodule PlatformWeb.Router do
 
     plug :put_secure_browser_headers, %{
       "content-security-policy" =>
-        "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; " <>
-          "frame-src 'self' https://challenges.cloudflare.com; " <>
+        "script-src 'self' 'unsafe-inline'; " <>
+          "frame-src 'self'; " <>
           "connect-src 'self'; " <>
           "style-src 'self' 'unsafe-inline'; "
     }

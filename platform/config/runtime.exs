@@ -16,8 +16,6 @@ source!([
 
 # API keys
 llm_api_key = env!("LLM_API_KEY", :string?, nil)
-turnstile_site_key = env!("TURNSTILE_SITE_KEY", :string?, nil)
-turnstile_secret_key = env!("TURNSTILE_SECRET_KEY", :string?, nil)
 bucket_name = env!("BUCKET_NAME", :string?, nil)
 aws_access_key_id = env!("AWS_ACCESS_KEY_ID", :string?, nil)
 aws_region = env!("AWS_REGION", :string?, "auto")
@@ -31,8 +29,6 @@ llm_url = env!("LLM_URL", :string?, "https://ollama.com/api")
 if config_env() == :prod do
   vars =
     [
-      {"TURNSTILE_SECRET_KEY", turnstile_secret_key},
-      {"TURNSTILE_SITE_KEY", turnstile_site_key},
       {"LLM_API_KEY", llm_api_key},
       {"BUCKET_NAME", bucket_name},
       {"AWS_ACCESS_KEY_ID", aws_access_key_id},
@@ -173,12 +169,6 @@ if pdf_agent_base_url do
     receipt_url: pdf_agent_base_url <> "/receipt",
     nec1099_url: pdf_agent_base_url <> "/1099-nec",
     bank_statement_url: pdf_agent_base_url <> "/bank-statement"
-end
-
-if turnstile_secret_key && turnstile_site_key do
-  config :platform, :turnstile,
-    site_key: turnstile_site_key,
-    secret_key: turnstile_secret_key
 end
 
 if bucket_name &&

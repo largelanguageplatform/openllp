@@ -2,7 +2,6 @@ defmodule PlatformWeb.AdminLive.Login do
   use PlatformWeb, :live_view
 
   alias Platform.Admin
-  alias Platform.Turnstile
 
   @impl true
   def render(assigns) do
@@ -53,16 +52,6 @@ defmodule PlatformWeb.AdminLive.Login do
             </button>
           </div>
 
-          <div
-            id="turnstile-widget"
-            phx-hook="Turnstile"
-            phx-update="ignore"
-            data-sitekey={@turnstile_site_key}
-            class="flex justify-center py-2"
-          >
-          </div>
-          <input type="hidden" name="admin[cf_turnstile_response]" id="cf-turnstile-response" />
-
           <.button
             type="submit"
             class="w-full bg-emerald-500 hover:bg-emerald-400 text-zinc-900 font-semibold py-3.5 rounded-xl text-base transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-400/30"
@@ -86,30 +75,17 @@ defmodule PlatformWeb.AdminLive.Login do
      socket
      |> assign(:form, form)
      |> assign(:error, nil)
-     |> assign(:trigger_submit, false)
-     |> assign(:turnstile_site_key, Turnstile.site_key())}
+     |> assign(:trigger_submit, false)}
   end
 
   @impl true
   def handle_event("validate_and_submit", %{"admin" => params}, socket) do
-    turnstile_token = params["cf_turnstile_response"] || ""
+    case Admin.get_admin_by_email_and_password(params["email"], params["password"]) do
+      nil ->
+        {:noreply, assign(socket, :error, "Invalid credentials")}
 
-    if turnstile_token == "" do
-      {:noreply, assign(socket, :error, "Please complete the captcha")}
-    else
-      case Turnstile.verify(turnstile_token) do
-        :ok ->
-          case Admin.get_admin_by_email_and_password(params["email"], params["password"]) do
-            nil ->
-              {:noreply, assign(socket, :error, "Invalid credentials")}
-
-            _admin ->
-              {:noreply, assign(socket, :trigger_submit, true)}
-          end
-
-        {:error, _} ->
-          {:noreply, assign(socket, :error, "Captcha verification failed")}
-      end
+      _admin ->
+        {:noreply, assign(socket, :trigger_submit, true)}
     end
   end
 end

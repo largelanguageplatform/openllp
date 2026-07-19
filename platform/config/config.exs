@@ -64,12 +64,6 @@ config :logger, :default_formatter,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Cloudflare Turnstile configuration (test keys - REPLACE IN PRODUCTION)
-# Test keys from: https://developers.cloudflare.com/turnstile/troubleshooting/testing/
-config :platform, :turnstile,
-  site_key: "1x00000000000000000000AA",
-  secret_key: "1x0000000000000000000000000000000AA"
-
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
