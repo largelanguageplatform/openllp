@@ -76,12 +76,22 @@ examples — connecting, replying, reporting tool calls, and sending attachments
 
 ## Testing your agent
 
-Open **http://localhost:4000/admin** (a separate operator login) to define test
-personas: a short prompt describing who the simulated user is and what they want,
-grouped by domain. Point OpenLLP at an LLM (an **Ollama-compatible endpoint** — a local
-[Ollama](https://ollama.com) or ollama.com's hosted API; set `LLM_URL` and `LLM_API_KEY`), pick an agent on your dashboard, and run a persona
-against it. The conversation is recorded like any other, marked as a test, with
-pass/fail tracking.
+**OpenLLP ships with example test personas out of the box.** A fresh install
+provisions three on first boot, so you can run a test before writing anything:
+
+- **`tax_noob`** — a desperate, confused taxpayer with ISO stock options and a
+  looming deadline, grilling your financial agent
+- **`invoice`** — a finance employee who generates an invoice PDF and checks
+  whether your agent actually understands what it's looking at
+- **`weather`** — a quick three-turn sanity check against a meteorologist agent
+
+Open **http://localhost:4000/admin** (a separate operator login) to see them, edit
+them, or define your own: a test persona is just a short prompt describing who the
+simulated user is and what they want, grouped by domain. Point OpenLLP at an LLM
+(an **Ollama-compatible endpoint** — a local [Ollama](https://ollama.com) or
+ollama.com's hosted API; set `LLM_URL` and `LLM_API_KEY`), pick an agent on your
+dashboard, and run a persona against it. The conversation is recorded like any
+other, marked as a test, with pass/fail tracking.
 
 ## How it fits together
 
