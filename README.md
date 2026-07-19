@@ -1,29 +1,115 @@
 # OpenLLP
 
-A self-hosted platform for connecting, observing, and battle-testing AI agents.
-Agents connect over a WebSocket using a small JSON protocol; OpenLLP authenticates
-them with API keys, routes messages between them, records their conversations, and
-gives you a live portal to watch and exercise them — including LLM-driven chaos
-testing against synthetic counterparts.
+**A home base for your AI agents.** You build agents — programs powered by language
+models that answer questions, use tools, and talk to people or to each other.
+OpenLLP is the place they connect to. It runs on your own machine or server, and it
+gives you three things that are hard to get when agents just run loose:
 
-**No accounts, no email, no login:** clone it, start it, generate an API key,
-and you're on the dashboard.
+1. **A live dashboard.** Every agent that connects shows up on a portal page. You can
+   see which ones are online and open a live view of everything each one says,
+   receives, and every tool call it makes — as it happens.
+2. **A shared network.** Agents connect to OpenLLP over a WebSocket and can send
+   messages to each other by name. OpenLLP routes the messages, keeps the history,
+   and records the whole conversation.
+3. **A test harness.** OpenLLP can play the *other side* of a conversation: it spins
+   up simulated users (driven by an LLM you configure) that interrogate your agent —
+   a confused taxpayer, an impatient customer, someone with a stack of invoices —
+   and records how your agent holds up. You define these test personas yourself.
+
+There are **no accounts, no email, and no login**. The only credential in the system
+is an API key for your agents. Clone it, start it, and you're on the dashboard in
+under a minute.
+
+## Quick start
 
 ```sh
 git clone https://github.com/largelanguageplatform/openllp.git
 cd openllp/platform
-docker-compose up
-# open http://localhost:4000 → Generate API Key → Dashboard
+docker compose up
 ```
 
-The platform, full documentation, architecture notes, and the guide to connecting
-your first agent with the [`llpsdk` client libraries](https://github.com/llpsdk)
-live in **[`platform/`](platform/)** — start with
-[`platform/README.md`](platform/README.md).
+Then open **http://localhost:4000** — you'll land on a page with one button:
+**Generate API Key**. Click it, copy the key (you only see it once), and continue to
+the dashboard. That key is what your agents use to connect.
 
-> **Security note:** the dashboard intentionally has no login — deploy it on a
-> private network or behind your own auth proxy. Details in
-> [`platform/README.md`](platform/README.md#security).
+Requirements: Docker. That's it — the bundled Postgres stays on Docker's internal
+network and won't conflict with anything else on your machine.
+
+## Connecting agents: the `llpsdk` client libraries
+
+Your agents talk to OpenLLP through **[llpsdk](https://github.com/orgs/llpsdk/repositories)**,
+a family of small client libraries. You write a handler function; the library handles
+the connection, authentication, reconnection, and the wire protocol:
+
+| Language | Install | Repository |
+|---|---|---|
+| Python | `pip install llpsdk` | [llpsdk/llp-python](https://github.com/llpsdk/llp-python) |
+| Go | `go get github.com/llpsdk/llp-go` | [llpsdk/llp-go](https://github.com/llpsdk/llp-go) |
+| TypeScript / JavaScript | `npm install llpsdk` | [llpsdk/llp-javascript](https://github.com/llpsdk/llp-javascript) |
+
+There is also [llpsdk/agent-skills](https://github.com/llpsdk/agent-skills) — reusable
+skills your agents can pick up.
+
+A minimal Python agent that echoes whatever it's sent:
+
+```python
+import asyncio
+import os
+import llpsdk as llp
+
+async def main():
+    client = llp.Client(
+        "my-agent",                       # the name shown on your dashboard
+        os.environ["LLP_API_KEY"],        # the key you generated on first run
+        # point the SDK at your own OpenLLP instance:
+        config=llp.Config(platform_url="ws://localhost:4000/agent/websocket"),
+    )
+    client.on_message(lambda ctx, msg: msg.reply(f"echo: {msg.text}"))
+    await client.connect()
+    await asyncio.Event().wait()
+
+asyncio.run(main())
+```
+
+Run it, and `my-agent` appears on your portal within a second; open its logs page to
+watch messages stream in live.
+
+**Full, language-specific walkthroughs live in the app itself:** your instance serves
+a guide at **http://localhost:4000/docs** with complete Python, Go, and TypeScript
+examples — connecting, replying, reporting tool calls, and sending attachments.
+
+## Testing your agent
+
+Open **http://localhost:4000/admin** (a separate operator login) to define test
+personas: a short prompt describing who the simulated user is and what they want,
+grouped by domain. Point OpenLLP at an LLM (any OpenAI-compatible endpoint — set
+`LLM_URL` and `LLM_API_KEY`), pick an agent on your dashboard, and run a persona
+against it. The conversation is recorded like any other, marked as a test, with
+pass/fail tracking.
+
+## How it fits together
+
+```
+your agents ──(WebSocket + API key)──► OpenLLP ◄──(browser)── you
+   llpsdk           JSON protocol      │  routes messages
+                                       │  records conversations
+                                       │  runs test personas
+                                       ▼
+                                   PostgreSQL
+```
+
+The wire protocol is small — `authenticate`, `presence`, `message`, `tool_call` —
+and documented in [`platform/README.md`](platform/README.md) along with the full
+architecture, manual (non-Docker) development setup, and configuration reference.
+
+## Security
+
+The dashboard intentionally has **no login** — like Prometheus or a database admin
+UI, it is built for private deployment. Anyone who can reach port 4000 has full
+access. Run it on localhost or a private network, or put your own reverse-proxy
+auth in front of it. The agent WebSocket **is** authenticated (API keys), and the
+`/admin` area has its own password. Details in
+[`platform/README.md`](platform/README.md#security).
 
 ## License
 
