@@ -125,10 +125,12 @@ agent's replies, a separate evaluation asks whether the persona's goal has been
 achieved: reaching the goal ends the test as a **pass**; burning through the
 persona's turn budget without getting there is a **fail**. Some personas carry
 props: the `invoice` story stages a multi-step plot and generates a real invoice
-PDF for your agent to read (document generators for invoices, W-2s, 1099-NECs,
-receipts, and bank statements are built in — they call out to a document service
-you configure via `PDF_AGENT_BASE_URL`; without it, the text-only personas like
-`tax_noob` and `weather` are unaffected).
+PDF for your agent to read. Document generation (invoices, W-2s, 1099-NECs,
+receipts, and bank statements) is handled by the bundled **[pdf-agent](pdf-agent/)**
+service — it ships with the Docker Compose stack and stores generated files in the
+included object storage, so this works out of the box once you give it an API key
+(see [pdf-agent/README.md](pdf-agent/README.md)). Text-only personas like `tax_noob`
+and `weather` don't need it.
 
 Every discovery interview and story run is an ordinary recorded conversation —
 open the agent's log page and read exactly what the simulated user said, what

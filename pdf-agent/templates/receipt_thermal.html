@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head><style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Courier New', Courier, FreeMono, monospace;
+        font-size: 12px;
+        color: #000;
+        background: #fff;
+        padding: 12px 4px;
+        width: 280px;
+        margin: 0 auto;
+        line-height: 1.4;
+    }
+
+    .center { text-align: center; }
+    .right  { text-align: right; }
+
+    .sep-major {
+        text-align: center;
+        letter-spacing: 0;
+        padding: 4px 0;
+        font-size: 12px;
+    }
+    .sep-minor {
+        text-align: center;
+        letter-spacing: 0;
+        padding: 4px 0;
+        font-size: 12px;
+    }
+
+    .store-header {
+        text-align: center;
+        padding: 4px 0;
+    }
+    .store-name {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 4px 0;
+    }
+    .store-detail {
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .date-line {
+        padding: 8px 0;
+        font-size: 11px;
+    }
+
+    .items {
+        padding: 4px 0;
+    }
+    .item-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 1px 0;
+        font-size: 11px;
+    }
+    .item-desc {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-transform: uppercase;
+    }
+    .item-amt {
+        flex-shrink: 0;
+        text-align: right;
+        padding-left: 8px;
+        font-variant-numeric: tabular-nums;
+    }
+    .item-detail {
+        font-size: 10px;
+        color: #333;
+        padding-left: 8px;
+        padding-bottom: 2px;
+    }
+
+    .totals {
+        padding: 2px 0;
+    }
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 1px 0;
+        font-size: 11px;
+    }
+    .total-row.grand {
+        font-weight: 700;
+        font-size: 13px;
+        padding: 2px 0;
+    }
+
+    .payment-info {
+        padding: 8px 0 4px 0;
+        font-size: 11px;
+    }
+
+    .footer {
+        text-align: center;
+        padding: 8px 0;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+    .footer-sub {
+        text-align: center;
+        font-size: 10px;
+        padding-bottom: 4px;
+    }
+</style></head>
+<body>
+    <div class="sep-major">=============================</div>
+    <div class="store-header">
+        <div class="store-name">{{.From.Name}}</div>
+        <div class="store-detail">{{.From.Address}}</div>
+        {{if .From.Phone}}<div class="store-detail">{{.From.Phone}}</div>{{end}}
+    </div>
+    <div class="sep-major">=============================</div>
+
+    <div class="date-line">{{.Date}}</div>
+
+    <div class="items">
+        {{range .Items}}
+        <div class="item-row">
+            <span class="item-desc">{{.Description}}</span>
+            <span class="item-amt">${{printf "%.2f" .Amount}}</span>
+        </div>
+        {{end}}
+    </div>
+
+    <div class="sep-minor">-----------------------------</div>
+
+    <div class="totals">
+        <div class="total-row">
+            <span>SUBTOTAL</span>
+            <span>${{printf "%.2f" .Subtotal}}</span>
+        </div>
+        <div class="total-row">
+            <span>TAX</span>
+            <span>${{printf "%.2f" .TaxAmount}}</span>
+        </div>
+    </div>
+
+    <div class="sep-major">=============================</div>
+
+    <div class="totals">
+        <div class="total-row grand">
+            <span>TOTAL</span>
+            <span>${{printf "%.2f" .Total}}</span>
+        </div>
+    </div>
+
+    <div class="sep-major">=============================</div>
+
+    <div class="payment-info">
+        {{.PaymentMethod}}
+    </div>
+
+    {{if .ReceiptNumber}}<div class="date-line">#{{.ReceiptNumber}}</div>{{end}}
+
+    <div class="footer">THANK YOU</div>
+    <div class="footer-sub">HAVE A NICE DAY!</div>
+</body>
+</html>

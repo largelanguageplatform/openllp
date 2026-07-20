@@ -1,0 +1,65 @@
+# github.com/go-pdf/fpdf v0.9.0
+## explicit; go 1.20
+github.com/go-pdf/fpdf
+# github.com/go-rod/rod v0.116.2
+## explicit; go 1.21
+github.com/go-rod/rod
+github.com/go-rod/rod/lib/assets
+github.com/go-rod/rod/lib/cdp
+github.com/go-rod/rod/lib/defaults
+github.com/go-rod/rod/lib/devices
+github.com/go-rod/rod/lib/input
+github.com/go-rod/rod/lib/js
+github.com/go-rod/rod/lib/launcher
+github.com/go-rod/rod/lib/launcher/flags
+github.com/go-rod/rod/lib/proto
+github.com/go-rod/rod/lib/utils
+# github.com/google/uuid v1.6.0
+## explicit
+github.com/google/uuid
+# github.com/gorilla/websocket v1.5.3
+## explicit; go 1.12
+github.com/gorilla/websocket
+# github.com/joho/godotenv v1.5.1
+## explicit; go 1.12
+github.com/joho/godotenv
+# github.com/llpsdk/llp-go v0.1.0
+## explicit; go 1.24.0
+github.com/llpsdk/llp-go
+# github.com/ollama/ollama v0.12.6
+## explicit; go 1.24.0
+github.com/ollama/ollama/api
+github.com/ollama/ollama/auth
+github.com/ollama/ollama/envconfig
+github.com/ollama/ollama/format
+github.com/ollama/ollama/types/model
+github.com/ollama/ollama/version
+# github.com/ysmood/fetchup v0.2.3
+## explicit; go 1.20
+github.com/ysmood/fetchup
+# github.com/ysmood/goob v0.4.0
+## explicit; go 1.15
+github.com/ysmood/goob
+# github.com/ysmood/got v0.40.0
+## explicit; go 1.21
+github.com/ysmood/got/lib/lcs
+# github.com/ysmood/gson v0.7.3
+## explicit; go 1.15
+github.com/ysmood/gson
+# github.com/ysmood/leakless v0.9.0
+## explicit; go 1.15
+github.com/ysmood/leakless
+github.com/ysmood/leakless/pkg/shared
+github.com/ysmood/leakless/pkg/utils
+# golang.org/x/crypto v0.42.0
+## explicit; go 1.24.0
+golang.org/x/crypto/blowfish
+golang.org/x/crypto/chacha20
+golang.org/x/crypto/curve25519
+golang.org/x/crypto/internal/alias
+golang.org/x/crypto/internal/poly1305
+golang.org/x/crypto/ssh
+golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
+# golang.org/x/sys v0.36.0
+## explicit; go 1.24.0
+golang.org/x/sys/cpu

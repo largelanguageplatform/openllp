@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head><style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, Helvetica, sans-serif; padding: 20px 28px; color: #000; font-size: 10px; line-height: 1.3; background: #fff; }
+    .form { max-width: 740px; margin: 0 auto; background: #FFF8F0; border: 1.5px solid #000; }
+
+    /* Top bar: VOID / CORRECTED */
+    .top-bar { display: flex; justify-content: space-between; padding: 4px 10px; font-size: 9px; border-bottom: 1px solid #000; }
+    .chk { display: inline-flex; align-items: center; gap: 3px; }
+    .chk-box { display: inline-block; width: 11px; height: 11px; border: 1px solid #000; text-align: center; font-size: 9px; line-height: 11px; }
+
+    /* Main grid: left content (payer/recipient) | right sidebar (copy info) */
+    .main { display: flex; }
+    .content { flex: 1; min-width: 0; }
+    .sidebar { width: 155px; background: #FFE5DE; border-left: 1.5px solid #000; display: flex; flex-direction: column; }
+    .sidebar-top { padding: 8px 10px; flex: 1; }
+    .sidebar-year { font-size: 36px; font-weight: 700; letter-spacing: 6px; color: #000; text-align: center; margin: 6px 0 4px 0; white-space: nowrap; }
+    .sidebar-form { font-size: 11px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+    .sidebar-copy { background: #FFD4C8; padding: 6px 10px; font-size: 9px; line-height: 1.4; text-align: center; border-top: 1px solid #000; }
+    .sidebar-copy-label { font-weight: 700; font-size: 10px; margin-bottom: 2px; }
+
+    /* Rows */
+    .row { display: flex; border-bottom: 1px solid #000; }
+    .row:last-child { border-bottom: none; }
+    .cell { padding: 5px 8px; border-right: 1px solid #000; min-height: 36px; }
+    .cell:last-child { border-right: none; }
+    .cell-payer-tin { width: 50%; }
+    .cell-recip-tin { width: 50%; }
+    .cell-full { width: 100%; }
+    .cell-payer-addr { width: 100%; min-height: 56px; }
+    .cell-recip-addr { width: 100%; min-height: 44px; }
+
+    .label { font-size: 7.5px; color: #333; text-transform: uppercase; letter-spacing: 0.2px; margin-bottom: 2px; line-height: 1.2; }
+    .value { font-size: 11px; margin-top: 1px; }
+    .value-sm { font-size: 10px; }
+    .box-num { font-weight: 700; font-size: 9px; color: #000; margin-right: 2px; }
+
+    /* Boxes row */
+    .boxes { border-bottom: 1px solid #000; }
+    .box-row { display: flex; border-bottom: 1px solid #999; }
+    .box-row:last-child { border-bottom: none; }
+    .box-cell { padding: 5px 8px; border-right: 1px solid #999; min-height: 34px; }
+    .box-cell:last-child { border-right: none; }
+    .box-cell-half { width: 50%; }
+    .box-cell-full { width: 100%; }
+    .box-gray { background: #D8D8D8; }
+    .money { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; margin-top: 2px; }
+    .money-sm { font-size: 11px; font-weight: 500; font-variant-numeric: tabular-nums; margin-top: 2px; }
+
+    /* Account / FATCA row */
+    .acct-row { display: flex; border-bottom: 1px solid #000; }
+    .acct-cell { padding: 5px 8px; border-right: 1px solid #000; }
+    .acct-cell:last-child { border-right: none; }
+    .acct-num { flex: 1; }
+    .acct-fatca { width: 120px; text-align: center; }
+
+    /* State row */
+    .state-section { border-top: 1px solid #000; }
+    .state-row { display: flex; border-bottom: 1px solid #999; }
+    .state-row:last-child { border-bottom: none; }
+    .state-cell { padding: 4px 8px; border-right: 1px solid #999; min-height: 30px; }
+    .state-cell:last-child { border-right: none; }
+
+    /* Footer */
+    .footer { display: flex; justify-content: space-between; padding: 4px 10px; font-size: 8px; color: #333; border-top: 1.5px solid #000; background: #fff; }
+    .footer-left { font-weight: 700; }
+</style></head>
+<body>
+<div class="form">
+    <!-- Top: VOID / CORRECTED checkboxes -->
+    <div class="top-bar">
+        <div class="chk"><span class="chk-box"></span> VOID</div>
+        <div class="chk"><span class="chk-box">{{if .Corrected}}&#10003;{{end}}</span> CORRECTED</div>
+    </div>
+
+    <div class="main">
+        <div class="content">
+            <!-- Payer TIN / Recipient TIN -->
+            <div class="row">
+                <div class="cell cell-payer-tin">
+                    <div class="label">Payer's TIN</div>
+                    <div class="value">{{.Payer.TIN}}</div>
+                </div>
+                <div class="cell cell-recip-tin">
+                    <div class="label">Recipient's TIN</div>
+                    <div class="value">{{.Recipient.TIN}}</div>
+                </div>
+            </div>
+
+            <!-- Payer name & address -->
+            <div class="row">
+                <div class="cell cell-payer-addr">
+                    <div class="label">Payer's name, street address, city or town, state or province, country, ZIP or foreign postal code, and telephone no.</div>
+                    <div class="value" style="margin-top:3px;">{{.Payer.Name}}</div>
+                    <div class="value-sm">{{.Payer.Address}}</div>
+                    {{if .Payer.Phone}}<div class="value-sm" style="color:#444;">{{.Payer.Phone}}</div>{{end}}
+                </div>
+            </div>
+
+            <!-- Recipient name -->
+            <div class="row">
+                <div class="cell cell-full">
+                    <div class="label">Recipient's name</div>
+                    <div class="value">{{.Recipient.Name}}</div>
+                </div>
+            </div>
+
+            <!-- Recipient street address -->
+            <div class="row">
+                <div class="cell cell-full">
+                    <div class="label">Street address (including apt. no.)</div>
+                    <div class="value-sm">{{.Recipient.StreetAddress}}</div>
+                </div>
+            </div>
+
+            <!-- Recipient city/state/zip -->
+            <div class="row">
+                <div class="cell cell-full">
+                    <div class="label">City or town, state or province, country, and ZIP or foreign postal code</div>
+                    <div class="value-sm">{{.Recipient.CityStateZip}}</div>
+                </div>
+            </div>
+
+            <!-- Account number + FATCA -->
+            <div class="acct-row">
+                <div class="acct-cell acct-num">
+                    <div class="label">Account number (see instructions)</div>
+                    <div class="value-sm">{{.AccountNumber}}</div>
+                </div>
+                <div class="acct-cell acct-fatca">
+                    <div class="label">FATCA filing</div>
+                    <div style="text-align:center;margin-top:2px;"><span class="chk-box">{{if .FATCAFiling}}&#10003;{{end}}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-top">
+                <div class="sidebar-year">{{.YearPrefix}} {{.YearSuffix}}</div>
+                <div class="sidebar-form">Form 1099-NEC</div>
+                <div style="font-size:8px;text-align:center;color:#333;line-height:1.4;margin-top:4px;">
+                    Nonemployee<br>Compensation
+                </div>
+            </div>
+            <div class="sidebar-copy">
+                <div class="sidebar-copy-label">Copy 1</div>
+                For State Tax Department
+            </div>
+        </div>
+    </div>
+
+    <!-- Boxes section -->
+    <div class="boxes">
+        <!-- Box 1 + Box 2 -->
+        <div class="box-row">
+            <div class="box-cell box-cell-half">
+                <div class="label"><span class="box-num">1</span> Nonemployee compensation</div>
+                <div class="money">${{printf "%.2f" .NonemployeeComp}}</div>
+            </div>
+            <div class="box-cell box-cell-half box-gray">
+                <div class="label"><span class="box-num">2</span> Payer made direct sales totaling $5,000 or more of consumer products to recipient for resale</div>
+                <div style="margin-top:2px;"><span class="chk-box">{{if .DirectSales}}&#10003;{{end}}</span></div>
+            </div>
+        </div>
+        <!-- Box 3 (reserved) -->
+        <div class="box-row">
+            <div class="box-cell box-cell-full box-gray" style="min-height:26px;">
+                <div class="label"><span class="box-num">3</span></div>
+            </div>
+        </div>
+        <!-- Box 4 -->
+        <div class="box-row">
+            <div class="box-cell box-cell-full">
+                <div class="label"><span class="box-num">4</span> Federal income tax withheld</div>
+                <div class="money">${{printf "%.2f" .FederalTaxWithheld}}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- State tax info: Boxes 5-7 -->
+    <div class="state-section">
+        {{if .StateTaxInfo}}
+        {{range .StateTaxInfo}}
+        <div class="state-row">
+            <div class="state-cell" style="width:15%;">
+                <div class="label"><span class="box-num">5</span> State</div>
+                <div class="value-sm">{{.State}}</div>
+            </div>
+            <div class="state-cell" style="width:25%;">
+                <div class="label"><span class="box-num">6</span> State identification no.</div>
+                <div class="value-sm">{{.StateID}}</div>
+            </div>
+            <div class="state-cell" style="width:30%;">
+                <div class="label"><span class="box-num">7</span> State income</div>
+                <div class="money-sm">${{printf "%.2f" .Income}}</div>
+            </div>
+            <div class="state-cell" style="width:30%;">
+                <div class="label">State tax withheld</div>
+                <div class="money-sm">${{printf "%.2f" .TaxWithheld}}</div>
+            </div>
+        </div>
+        {{end}}
+        {{else}}
+        <div class="state-row">
+            <div class="state-cell" style="width:15%;">
+                <div class="label"><span class="box-num">5</span> State</div>
+            </div>
+            <div class="state-cell" style="width:25%;">
+                <div class="label"><span class="box-num">6</span> State identification no.</div>
+            </div>
+            <div class="state-cell" style="width:30%;">
+                <div class="label"><span class="box-num">7</span> State income</div>
+            </div>
+            <div class="state-cell" style="width:30%;">
+                <div class="label">State tax withheld</div>
+            </div>
+        </div>
+        {{end}}
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <span class="footer-left">Form 1099-NEC</span>
+        <span>www.irs.gov/Form1099NEC</span>
+        <span>Department of the Treasury - Internal Revenue Service</span>
+    </div>
+</div>
+</body>
+</html>

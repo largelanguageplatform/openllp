@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head><style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, Helvetica, sans-serif; padding: 24px 32px; color: #000; font-size: 11px; line-height: 1.4; }
+    .statement { max-width: 720px; margin: 0 auto; }
+
+    .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #003087; padding-bottom: 12px; margin-bottom: 16px; }
+    .bank-name { font-size: 18px; font-weight: 700; color: #003087; }
+    .bank-address { font-size: 10px; color: #444; margin-top: 3px; line-height: 1.5; }
+    .stmt-info { text-align: right; }
+    .stmt-period { font-weight: 600; font-size: 11px; }
+    .stmt-acct { font-size: 10px; color: #444; margin-top: 4px; }
+
+    .info-row { display: flex; justify-content: space-between; margin-bottom: 20px; padding-top: 4px; }
+    .customer-block { font-size: 11px; line-height: 1.6; }
+    .customer-name { font-weight: 700; }
+    .service-block { font-size: 10px; }
+    .service-block table { border-collapse: collapse; }
+    .service-block td { padding: 1px 0; }
+    .service-label { color: #555; padding-right: 10px; }
+    .service-title { font-weight: 700; font-size: 10px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+
+    .summary-section { border: 1.5px solid #003087; margin-bottom: 24px; }
+    .summary-title { background: #003087; color: #fff; padding: 6px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .summary-subtitle { font-weight: 400; font-size: 10px; margin-left: 8px; text-transform: none; letter-spacing: 0; }
+    .summary-content { padding: 8px 12px; }
+    .summary-header { display: flex; justify-content: flex-end; padding: 2px 0 4px 0; font-size: 10px; font-weight: 600; color: #555; text-transform: uppercase; }
+    .summary-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 11px; }
+    .summary-row.total { border-top: 1.5px solid #000; margin-top: 6px; padding-top: 6px; font-weight: 700; }
+    .summary-amount { font-variant-numeric: tabular-nums; text-align: right; min-width: 100px; }
+
+    .txn-section { margin-bottom: 16px; border: 1px solid #bbb; }
+    .txn-title { background: #e8e8e8; padding: 5px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; border-bottom: 1px solid #bbb; }
+    table.txn { width: 100%; border-collapse: collapse; }
+    table.txn th { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; padding: 4px 12px; border-bottom: 1px solid #ccc; text-align: left; color: #444; }
+    table.txn th.right { text-align: right; }
+    table.txn td { padding: 4px 12px; font-size: 11px; vertical-align: top; }
+    table.txn tr.txn-row td { border-bottom: 1px solid #f0f0f0; }
+    table.txn td.right { text-align: right; font-variant-numeric: tabular-nums; }
+    table.txn td.bal { text-align: right; font-variant-numeric: tabular-nums; color: #555; font-size: 10px; }
+    .txn-total-row { background: #fafafa; border-top: 1.5px solid #000; }
+    .txn-total-row td { font-weight: 700; padding: 6px 12px; font-size: 11px; }
+
+    .footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid #ccc; font-size: 9px; color: #777; text-align: center; }
+</style></head>
+<body>
+<div class="statement">
+    <div class="header">
+        <div>
+            <div class="bank-name">{{.Bank.Name}}</div>
+            <div class="bank-address">{{.Bank.Address}}</div>
+        </div>
+        <div class="stmt-info">
+            <div class="stmt-period">{{.StatementPeriod.Start}} through {{.StatementPeriod.End}}</div>
+            <div class="stmt-acct">Account number {{.AccountNumber}}</div>
+        </div>
+    </div>
+
+    <div class="info-row">
+        <div class="customer-block">
+            <div class="customer-name">{{.AccountHolder.Name}}</div>
+            <div>{{.AccountHolder.Address}}</div>
+        </div>
+        {{if or .Bank.Phone .Bank.Website}}
+        <div class="service-block">
+            <div class="service-title">Customer Service Information</div>
+            <table>
+                {{if .Bank.Website}}<tr><td class="service-label">Web site:</td><td>{{.Bank.Website}}</td></tr>{{end}}
+                {{if .Bank.Phone}}<tr><td class="service-label">Service Center:</td><td>{{.Bank.Phone}}</td></tr>{{end}}
+            </table>
+        </div>
+        {{end}}
+    </div>
+
+    <div class="summary-section">
+        <div class="summary-title">{{.AccountType}} Summary</div>
+        <div class="summary-content">
+            <div class="summary-header"><span class="summary-amount">AMOUNT</span></div>
+            <div class="summary-row">
+                <span>Beginning Balance</span>
+                <span class="summary-amount">${{printf "%.2f" .Summary.BeginningBalance}}</span>
+            </div>
+            <div class="summary-row">
+                <span>Deposits and Additions</span>
+                <span class="summary-amount">${{printf "%.2f" .Summary.TotalDeposits}}</span>
+            </div>
+            <div class="summary-row">
+                <span>Withdrawals</span>
+                <span class="summary-amount">-${{printf "%.2f" .Summary.TotalWithdrawals}}</span>
+            </div>
+            {{if .Summary.TotalFees}}
+            <div class="summary-row">
+                <span>Fees</span>
+                <span class="summary-amount">-${{printf "%.2f" .Summary.TotalFees}}</span>
+            </div>
+            {{end}}
+            <div class="summary-row total">
+                <span>Ending Balance</span>
+                <span class="summary-amount">${{printf "%.2f" .Summary.EndingBalance}}</span>
+            </div>
+        </div>
+    </div>
+
+    {{range .Groups}}
+    <div class="txn-section">
+        <div class="txn-title">{{.Category}}</div>
+        <table class="txn">
+            <thead>
+                <tr>
+                    <th style="width:65px;">Date</th>
+                    <th>Description</th>
+                    <th class="right" style="width:85px;">Amount</th>
+                    <th class="right" style="width:85px;">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Transactions}}
+                <tr class="txn-row">
+                    <td>{{.Date}}</td>
+                    <td>{{.Description}}</td>
+                    <td class="right">${{printf "%.2f" .Amount}}</td>
+                    <td class="bal">${{printf "%.2f" .Balance}}</td>
+                </tr>
+                {{end}}
+                <tr class="txn-total-row">
+                    <td colspan="2">Total {{.Category}}</td>
+                    <td class="right">${{printf "%.2f" .Total}}</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {{end}}
+
+    <div class="footer">
+        This statement is a summary of your account activity. Please review and retain for your records.
+    </div>
+</div>
+</body>
+</html>

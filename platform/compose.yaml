@@ -17,10 +17,42 @@ services:
       retries: 5
     networks:
       - openllp-network
+
+  # Object storage for attachments (generated PDFs, uploads). Internal only.
+  minio:
+    image: minio/minio:latest
+    command: server /data
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    healthcheck:
+      test: [ "CMD", "mc", "ready", "local" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - openllp-network
+
+  # Creates the bucket once MinIO is up, then exits.
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 minioadmin minioadmin &&
+      mc mb --ignore-existing local/openllp &&
+      echo 'bucket ready'"
+    networks:
+      - openllp-network
+
   platform:
     image: openllp/platform:latest
     depends_on:
       db:
+        condition: service_healthy
+      minio:
         condition: service_healthy
     ports:
       # The dashboard has NO login (single-tenant bootstrap mode): anyone who
@@ -36,12 +68,38 @@ services:
       PHX_HOST: "localhost"
       USE_HTTP: "true"
       AUTO_MIGRATE: "true"
+      # Object storage (the bundled MinIO).
+      BUCKET_NAME: "openllp"
+      AWS_ENDPOINT_URL_S3: "http://minio:9000"
+      AWS_ACCESS_KEY_ID: "minioadmin"
+      AWS_SECRET_ACCESS_KEY: "minioadmin"
+      AWS_REGION: "us-east-1"
+      # The document (PDF) generator. Remove this line to run without it —
+      # the platform degrades gracefully and text-only test personas still work.
+      PDF_AGENT_BASE_URL: "http://pdf-agent:8000"
+    networks:
+      - openllp-network
+
+  # Generates realistic financial documents (invoices, W-2s, 1099-NECs,
+  # receipts, bank statements) as PDFs for the chaos test personas. It asks
+  # the platform for a signed upload URL, renders the PDF, and stores it in
+  # the bucket. Needs an API key — see pdf-agent/README.md for first-run setup.
+  pdf-agent:
+    build: ../pdf-agent
+    image: openllp/pdf-agent:latest
+    depends_on:
+      - platform
+    environment:
+      LLP_API_URL: "http://platform:4000/api/v1"
+      LLP_API_KEY: "${PDF_AGENT_API_KEY:-}"
+      OLLAMA_HOST: "${OLLAMA_HOST:-https://ollama.com}"
+      OLLAMA_API_KEY: "${OLLAMA_API_KEY:-}"
+      OLLAMA_MODEL: "${OLLAMA_MODEL:-gpt-oss:120b}"
     networks:
       - openllp-network
 
 networks:
   openllp-network:
+    # The platform release connects to Postgres over IPv6 (ECTO_IPV6=true).
+    # Enable it here; no fixed subnet, so multiple stacks never collide.
     enable_ipv6: true
-    ipam:
-      config:
-        - subnet: 2001:db8::/64
