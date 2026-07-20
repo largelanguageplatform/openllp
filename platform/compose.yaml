@@ -83,9 +83,9 @@ services:
   # Generates realistic financial documents (invoices, W-2s, 1099-NECs,
   # receipts, bank statements) as PDFs for the chaos test personas. It asks
   # the platform for a signed upload URL, renders the PDF, and stores it in
-  # the bucket. Needs an API key — see pdf-agent/README.md for first-run setup.
+  # the bucket. Needs an API key — see agents/pdf-agent/README.md for first-run setup.
   pdf-agent:
-    build: ../pdf-agent
+    build: ../agents/pdf-agent
     image: openllp/pdf-agent:latest
     depends_on:
       - platform

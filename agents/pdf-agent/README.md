@@ -48,4 +48,4 @@ the Docker image bundles Chromium.
 
 ## License
 
-Apache License 2.0 — see the [repository root](../LICENSE).
+Apache License 2.0 — see the [repository root](../../LICENSE).
